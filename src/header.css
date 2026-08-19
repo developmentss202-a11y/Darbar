@@ -85,7 +85,6 @@
 
 .header-action {
   height: 44px;
-
   min-width: 44px;
 
   display: flex;
@@ -115,10 +114,61 @@
   background: var(--color-primary-light);
 }
 
+/* ============================================================
+   HEADER ACTION ICON
+   ============================================================ */
+
 .header-action-icon {
   font-size: 20px;
 
   line-height: 1;
+}
+
+/* ============================================================
+   TELEGRAM
+   ============================================================ */
+
+.telegram-action {
+  padding: 0 10px;
+
+  min-width: auto;
+}
+
+.telegram-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  line-height: 1;
+}
+
+/*
+  IMPORTANT:
+  Font size is scoped only to Telegram.
+  It will NOT affect other elements.
+*/
+
+.telegram-content span {
+  font-size: 12px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.telegram-content img {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -194,7 +244,8 @@
   width: 44px;
   height: 44px;
 
-  display: flex;
+  display: none;
+
   flex-direction: column;
 
   align-items: center;
@@ -260,28 +311,31 @@
   position: fixed;
 
   top: 0;
-  right: 0;
+  left: 0;
 
-  width: 340px;
+  width: 280px;
   max-width: 90vw;
 
   height: 100vh;
 
   background: var(--color-white);
 
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.12);
+  border-right: 1px solid var(--color-border-light);
+
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
 
   z-index: 1100;
 
   overflow-y: auto;
 
-  transform: translateX(100%);
+  /*
+    DESKTOP:
+    Sidebar remains permanently visible.
+  */
+
+  transform: translateX(0);
 
   transition: transform 0.25s ease;
-}
-
-.side-menu.open {
-  transform: translateX(0);
 }
 
 /* ============================================================
@@ -352,7 +406,7 @@
 }
 
 /* ============================================================
-   DIVIDER
+   SIDE MENU DIVIDER
    ============================================================ */
 
 .side-menu-divider {
@@ -493,14 +547,106 @@
 }
 
 /* ============================================================
-   TABLET
+   DESKTOP
+   ABOVE 800px
    ============================================================ */
 
-@media (max-width: 768px) {
+@media (min-width: 801px) {
+  /*
+    Header starts after the permanent sidebar.
+  */
+
   .app-header {
+    margin-left: 280px;
+
+    width: calc(100% - 280px);
+  }
+
+  /*
+    Hamburger is hidden.
+  */
+
+  .menu-button {
+    display: none;
+  }
+
+  /*
+    Sidebar stays visible.
+  */
+
+  .side-menu {
+    left: 0;
+
+    transform: translateX(0);
+  }
+
+  /*
+    No overlay on desktop.
+  */
+
+  .menu-overlay {
+    display: none;
+  }
+}
+
+/* ============================================================
+   TABLET / HAMBURGER
+   800px AND BELOW
+   ============================================================ */
+
+@media (max-width: 800px) {
+  /*
+    Header returns to full width.
+  */
+
+  .app-header {
+    width: 100%;
+
+    margin-left: 0;
+
     height: 64px;
 
     padding: 0 16px;
+  }
+
+  /*
+    Hamburger becomes visible.
+  */
+
+  .menu-button {
+    display: flex;
+
+    width: 42px;
+    height: 42px;
+  }
+
+  /*
+    Sidebar is hidden by default.
+    It slides from the LEFT.
+  */
+
+  .side-menu {
+    left: 0;
+    right: auto;
+
+    width: 320px;
+    max-width: 90vw;
+
+    transform: translateX(-100%);
+
+    border-right: 1px solid var(--color-border-light);
+
+    border-left: none;
+
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.12);
+  }
+
+  /*
+    Open sidebar.
+  */
+
+  .side-menu.open {
+    transform: translateX(0);
   }
 
   .header-logo img {
@@ -511,6 +657,10 @@
   .header-brand-name {
     font-size: var(--font-size-lg);
   }
+
+  /*
+    Compact wallet on tablet.
+  */
 
   .header-wallet {
     min-width: 44px;
@@ -530,14 +680,30 @@
     gap: 6px;
   }
 
-  .header-action,
-  .menu-button {
+  .header-action {
     width: 42px;
     height: 42px;
   }
 
-  .side-menu {
-    width: 320px;
+  /*
+    Keep Telegram compact.
+  */
+
+  .telegram-action {
+    min-width: 42px;
+
+    width: 42px;
+
+    padding: 0;
+  }
+
+  .telegram-content span {
+    display: none;
+  }
+
+  .telegram-content img {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -573,6 +739,17 @@
     gap: 5px;
   }
 
+  .telegram-action {
+    width: 40px;
+
+    min-width: 40px;
+  }
+
+  .telegram-content img {
+    width: 19px;
+    height: 19px;
+  }
+
   .side-menu {
     width: 300px;
   }
@@ -580,4 +757,26 @@
   .side-menu-profile {
     padding: 20px;
   }
+}
+
+.side-menu::-webkit-scrollbar {
+  width: 3px;
+}
+
+.side-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.side-menu::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+.side-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.side-menu {
+  scrollbar-width: thin;
+  scrollbar-color: #cfcfcf transparent;
 }
