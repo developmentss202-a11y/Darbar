@@ -1,0 +1,1716 @@
+/* =========================================================
+   GLOBAL / HEADER CONTAINER
+========================================================= */
+
+.header-container {
+  width: 100%;
+  max-width: 1213px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  width: 100%;
+  height: 84px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: 10000;
+
+  background: transparent;
+
+  border-bottom: 1px solid transparent;
+
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.header-scrolled {
+  background: #303030;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo-wrapper {
+  width: 125px;
+  height: 100%;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  text-decoration: none;
+
+  position: relative;
+  z-index: 10001;
+}
+
+.header-logo {
+  display: block;
+
+  width: 110px;
+  height: auto;
+  max-height: 80px;
+
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* =========================================================
+   DESKTOP NAVIGATION
+========================================================= */
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+.nav-menu button {
+  position: relative;
+
+  padding: 8px 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #e8e8e8;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  letter-spacing: 0.4px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.nav-menu button:hover {
+  color: #e00012;
+}
+
+.nav-menu button.active {
+  color: #e00012;
+  font-weight: 600;
+}
+
+.nav-menu button::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background: #e00012;
+
+  border-radius: 2px;
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  transition: transform 0.25s ease;
+}
+
+.nav-menu button:hover::after,
+.nav-menu button.active::after {
+  transform: scaleX(1);
+}
+
+/* =========================================================
+   DESKTOP LOGIN / SIGNUP
+========================================================= */
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  flex-shrink: 0;
+}
+
+.auth-buttons button {
+  height: 34px;
+  padding: 0 17px;
+
+  border-radius: 4px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.login-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #777;
+}
+
+.login-btn:hover {
+  border-color: #e00012;
+  color: #e00012;
+}
+
+.signup-btn {
+  background: #df0013;
+  color: #fff;
+  border: 1px solid #df0013;
+}
+
+.signup-btn:hover {
+  background: #b9000f;
+  border-color: #b9000f;
+}
+
+/* =========================================================
+   HAMBURGER
+========================================================= */
+
+.hamburger {
+  display: none;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+  margin: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  border-radius: 6px;
+
+  background: rgba(0, 0, 0, 0.08);
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  cursor: pointer;
+
+  position: relative;
+  z-index: 10002;
+
+  flex-shrink: 0;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.06);
+
+  border-color: rgba(223, 0, 19, 0.5);
+}
+
+.hamburger span {
+  display: block;
+
+  width: 20px;
+  height: 2px;
+
+  background: #ffffff;
+
+  border-radius: 2px;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    width 0.25s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================================
+   MOBILE MENU
+   IMPORTANT:
+   The wrapper itself controls open/close.
+========================================================= */
+
+.mobile-menu {
+  display: none;
+}
+
+/* =========================================================
+   HOME / HERO
+========================================================= */
+
+.home-section {
+  width: 100%;
+  background: #303030;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.home-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  left: -180px;
+  top: -280px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  transform: rotate(45deg);
+}
+
+.home-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 600px;
+  height: 250px;
+
+  right: -200px;
+  bottom: -150px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border-radius: 50%;
+
+  transform: rotate(-20deg);
+}
+
+.home-container {
+  width: 100%;
+  max-width: 1180px;
+
+  min-height: 82vh;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 70px;
+
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   HOME LOGO
+========================================================= */
+
+.home-logo {
+  width: 500px;
+  height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.home-logo img {
+  width: 700px;
+  max-width: 100%;
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* =========================================================
+   HOME CONTENT
+========================================================= */
+
+.home-content {
+  max-width: 470px;
+}
+
+.home-content h1 {
+  margin: 0 0 18px;
+
+  color: #ffffff;
+
+  font-size: 38px;
+  line-height: 1.25;
+  font-weight: 600;
+
+  font-family: Arial, sans-serif;
+}
+
+.home-content p {
+  margin: 0 0 28px;
+
+  color: #d1d1d1;
+
+  font-size: 14px;
+  line-height: 1.8;
+
+  font-family: Arial, sans-serif;
+}
+
+/* =========================================================
+   DOWNLOAD BUTTON
+========================================================= */
+
+.download-btn {
+  border: none;
+
+  background: #df0013;
+  color: #ffffff;
+
+  padding: 13px 25px;
+
+  border-radius: 25px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.download-btn:hover {
+  background: #b9000f;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 15px rgba(223, 0, 19, 0.3);
+}
+
+/* =========================================================
+   ABOUT US
+========================================================= */
+
+.about-section {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #262626;
+
+  position: relative;
+  overflow: hidden;
+
+  padding: 90px 0 80px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+.about-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  left: -220px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: rgba(223, 0, 19, 0.035);
+}
+
+.about-heading {
+  width: 100%;
+
+  text-align: center;
+
+  margin-bottom: 55px;
+
+  position: relative;
+  z-index: 2;
+}
+
+.about-heading span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #df0013;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+.about-heading h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 36px;
+  line-height: 1.2;
+
+  font-weight: 600;
+}
+
+.about-heading h2 strong {
+  color: #df0013;
+  font-weight: 600;
+}
+
+.about-container {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 0 70px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 90px;
+
+  align-items: center;
+
+  position: relative;
+  z-index: 2;
+
+  box-sizing: border-box;
+}
+
+.about-content {
+  max-width: 520px;
+}
+
+.about-content h3 {
+  margin: 0 0 22px;
+
+  color: #ffffff;
+
+  font-size: 32px;
+  line-height: 1.25;
+
+  font-weight: 600;
+}
+
+.about-content h3 span {
+  color: #df0013;
+}
+
+.about-content p {
+  margin: 0 0 16px;
+
+  color: #bdbdbd;
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.about-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-feature {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 22px;
+
+  padding: 23px 25px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  border-radius: 8px;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.about-feature:hover {
+  background: rgba(255, 255, 255, 0.055);
+
+  border-color: rgba(223, 0, 19, 0.35);
+
+  transform: translateX(5px);
+}
+
+.feature-number {
+  min-width: 45px;
+
+  color: #df0013;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  padding-top: 2px;
+}
+
+.about-feature h3 {
+  margin: 0 0 7px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.about-feature p {
+  margin: 0;
+
+  color: #999999;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   GAMES
+========================================================= */
+
+.games-section {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #303030;
+
+  position: relative;
+  overflow: hidden;
+
+  padding: 100px 0 80px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+.games-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  right: -250px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: rgba(223, 0, 19, 0.04);
+}
+
+.games-heading {
+  width: 100%;
+
+  text-align: center;
+
+  margin-bottom: 55px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+.games-heading span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #df0013;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+.games-heading h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 36px;
+
+  line-height: 1.2;
+
+  font-weight: 600;
+}
+
+.games-heading h2 strong {
+  color: #df0013;
+  font-weight: 600;
+}
+
+.games-container {
+  width: 100%;
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 0 70px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 80px;
+
+  align-items: center;
+
+  position: relative;
+
+  z-index: 2;
+
+  box-sizing: border-box;
+}
+
+.games-content {
+  max-width: 500px;
+}
+
+.games-description {
+  margin: 0 0 30px;
+
+  color: #bdbdbd;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+.rate-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+
+  max-width: 430px;
+}
+
+.rate-card {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 20px 24px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 8px;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.rate-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+
+  border-color: rgba(223, 0, 19, 0.4);
+
+  transform: translateX(5px);
+}
+
+.rate-name {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.rate-name span {
+  color: #ffffff;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.7px;
+}
+
+.rate-name small {
+  color: #b5b5b5;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+}
+
+.rate-value {
+  color: #df0013;
+
+  font-size: 24px;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   GAMES IMAGE
+========================================================= */
+
+.games-image {
+  width: 100%;
+
+  min-height: 430px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.games-image img {
+  display: block;
+
+  width: 100%;
+
+  max-width: 500px;
+
+  height: auto;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.25));
+}
+
+/* =========================================================
+   HOW TO PLAY
+========================================================= */
+
+.how-to-play-section {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #262626;
+
+  position: relative;
+  overflow: hidden;
+
+  padding: 100px 0 90px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+.how-to-play-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  left: -250px;
+  bottom: -180px;
+
+  border-radius: 50%;
+
+  background: rgba(223, 0, 19, 0.035);
+}
+
+.how-to-play-heading {
+  width: 100%;
+
+  text-align: center;
+
+  margin-bottom: 55px;
+
+  padding: 0 25px;
+
+  position: relative;
+  z-index: 2;
+
+  box-sizing: border-box;
+}
+
+.how-to-play-heading span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #df0013;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+.how-to-play-heading h2 {
+  margin: 0 0 15px;
+
+  color: #ffffff;
+
+  font-size: 36px;
+
+  line-height: 1.2;
+
+  font-weight: 600;
+}
+
+.how-to-play-heading h2 strong {
+  color: #df0013;
+  font-weight: 600;
+}
+
+.how-to-play-heading p {
+  max-width: 550px;
+
+  margin: 0 auto;
+
+  color: #bdbdbd;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+.how-to-play-container {
+  width: 100%;
+
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  padding: 0 40px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+
+  position: relative;
+
+  z-index: 2;
+
+  box-sizing: border-box;
+}
+
+.play-step {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding: 25px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  border-radius: 8px;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.play-step:hover {
+  background: rgba(255, 255, 255, 0.055);
+
+  border-color: rgba(223, 0, 19, 0.4);
+
+  transform: translateY(-4px);
+}
+
+.step-number {
+  min-width: 45px;
+
+  color: #df0013;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  padding-top: 2px;
+}
+
+.step-content h3 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.step-content p {
+  margin: 0;
+
+  color: #999999;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  width: 100%;
+
+  background: #0b0b0b;
+
+  color: #ffffff;
+
+  padding: 20px;
+
+  text-align: center;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-sizing: border-box;
+}
+
+.footer p {
+  margin: 0;
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.3px;
+
+  color: #bdbdbd;
+}
+
+/* =========================================================
+   TABLET / MOBILE
+========================================================= */
+
+@media (max-width: 800px) {
+  /* =======================================================
+     HEADER
+  ======================================================= */
+
+  .header {
+    height: 72px;
+  }
+
+  .header-container {
+    width: 100%;
+    max-width: none;
+
+    padding: 0 20px;
+
+    box-sizing: border-box;
+  }
+
+  /* =======================================================
+     LOGO
+  ======================================================= */
+
+  .logo-wrapper {
+    width: 110px;
+  }
+
+  .header-logo {
+    width: 100px;
+    max-height: 60px;
+  }
+
+  /* =======================================================
+     HIDE DESKTOP NAVIGATION
+  ======================================================= */
+
+  .header-container > .nav-menu {
+    display: none !important;
+  }
+
+  .header-container > .desktop-auth {
+    display: none !important;
+  }
+
+  /* =======================================================
+     SHOW HAMBURGER
+  ======================================================= */
+
+  .hamburger {
+    display: flex !important;
+
+    margin-left: auto;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* =======================================================
+     MOBILE MENU
+     THIS IS THE IMPORTANT FIX
+  ======================================================= */
+
+  .mobile-menu {
+    display: flex !important;
+
+    position: fixed;
+
+    top: 82px;
+    right: 20px;
+
+    width: 260px;
+
+    padding: 10px;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    box-sizing: border-box;
+
+    background: #303030;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    border-radius: 8px;
+
+    box-shadow:
+      0 15px 40px rgba(0, 0, 0, 0.5),
+      0 5px 15px rgba(0, 0, 0, 0.3);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform: translateY(-12px);
+
+    transition:
+      opacity 0.25s ease,
+      visibility 0.25s ease,
+      transform 0.25s ease;
+
+    z-index: 99999;
+  }
+
+  /* =======================================================
+     OPEN MOBILE MENU
+  ======================================================= */
+
+  .mobile-menu.mobile-menu-open {
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    pointer-events: auto !important;
+
+    transform: translateY(0) !important;
+  }
+
+  /* =======================================================
+     MOBILE NAV
+  ======================================================= */
+
+  .mobile-nav {
+    display: flex !important;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    box-sizing: border-box;
+  }
+
+  .mobile-nav button {
+    display: block;
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 12px 15px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #e8e8e8;
+
+    text-align: left;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.4px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .mobile-nav button:hover {
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #df0013;
+  }
+
+  .mobile-nav button.active {
+    background: rgba(223, 0, 19, 0.1);
+
+    color: #df0013;
+
+    font-weight: 600;
+  }
+
+  /* =======================================================
+     MOBILE AUTH
+     JSX CLASS = mobile-auth
+  ======================================================= */
+
+  .mobile-auth {
+    display: flex !important;
+
+    width: 100%;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin: 5px 0 0;
+
+    padding-top: 10px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-sizing: border-box;
+  }
+
+  .mobile-auth button {
+    display: block;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 10px 15px;
+
+    border-radius: 5px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+  }
+
+  .mobile-auth .login-btn {
+    background: transparent;
+
+    border: 1px solid #777;
+
+    color: #ffffff;
+  }
+
+  .mobile-auth .login-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+
+    border-color: #df0013;
+
+    color: #df0013;
+  }
+
+  .mobile-auth .signup-btn {
+    background: #df0013;
+
+    border: 1px solid #df0013;
+
+    color: #ffffff;
+  }
+
+  .mobile-auth .signup-btn:hover {
+    background: #b9000f;
+
+    border-color: #b9000f;
+  }
+
+  /* =======================================================
+     HOME MOBILE
+  ======================================================= */
+
+  .home-container {
+    min-height: auto;
+
+    padding: 100px 25px 60px;
+
+    flex-direction: column;
+
+    gap: 25px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+  }
+
+  .home-logo {
+    width: 220px;
+    height: 220px;
+  }
+
+  .home-logo img {
+    width: 190px;
+  }
+
+  .home-content {
+    max-width: 600px;
+  }
+
+  .home-content h1 {
+    font-size: 30px;
+  }
+
+  .home-content p {
+    font-size: 13px;
+  }
+
+  /* =======================================================
+     ABOUT MOBILE
+  ======================================================= */
+
+  .about-section {
+    min-height: auto;
+
+    padding: 80px 0;
+  }
+
+  .about-heading {
+    margin-bottom: 45px;
+
+    padding: 0 25px;
+  }
+
+  .about-heading h2 {
+    font-size: 32px;
+  }
+
+  .about-container {
+    grid-template-columns: 1fr;
+
+    gap: 50px;
+
+    padding: 0 30px;
+  }
+
+  .about-content {
+    max-width: 650px;
+  }
+
+  .about-content h3 {
+    font-size: 30px;
+  }
+
+  /* =======================================================
+     GAMES MOBILE
+  ======================================================= */
+
+  .games-section {
+    min-height: auto;
+
+    padding: 90px 0 70px;
+  }
+
+  .games-heading {
+    margin-bottom: 45px;
+
+    padding: 0 25px;
+  }
+
+  .games-heading h2 {
+    font-size: 32px;
+  }
+
+  .games-container {
+    grid-template-columns: 1fr;
+
+    gap: 50px;
+
+    padding: 0 30px;
+  }
+
+  .games-content {
+    max-width: 650px;
+  }
+
+  .games-image {
+    min-height: auto;
+
+    order: 2;
+  }
+
+  .games-image img {
+    max-width: 400px;
+  }
+
+  /* =======================================================
+     HOW TO PLAY MOBILE
+  ======================================================= */
+
+  .how-to-play-section {
+    min-height: auto;
+
+    padding: 90px 0 70px;
+  }
+
+  .how-to-play-heading {
+    margin-bottom: 45px;
+  }
+
+  .how-to-play-heading h2 {
+    font-size: 32px;
+  }
+
+  .how-to-play-container {
+    grid-template-columns: 1fr;
+
+    padding: 0 30px;
+
+    max-width: 700px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+  .header {
+    height: 68px;
+  }
+
+  .header-container {
+    padding: 0 15px;
+  }
+
+  .logo-wrapper {
+    width: 100px;
+  }
+
+  .header-logo {
+    width: 90px;
+  }
+
+  .hamburger {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* =======================================================
+     MOBILE MENU
+  ======================================================= */
+
+  .mobile-menu {
+    top: 78px;
+    right: 15px;
+
+    width: calc(100vw - 30px);
+
+    max-width: 300px;
+  }
+
+  /* =======================================================
+     HOME
+  ======================================================= */
+
+  .home-container {
+    padding: 90px 20px 45px;
+  }
+
+  .home-logo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .home-logo img {
+    width: 155px;
+  }
+
+  .home-content h1 {
+    font-size: 26px;
+  }
+
+  .home-content p {
+    font-size: 12px;
+  }
+
+  /* =======================================================
+     ABOUT
+  ======================================================= */
+
+  .about-section {
+    padding: 70px 0;
+  }
+
+  .about-heading {
+    margin-bottom: 40px;
+  }
+
+  .about-heading span {
+    font-size: 11px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .about-heading h2 {
+    font-size: 28px;
+  }
+
+  .about-container {
+    padding: 0 20px;
+
+    gap: 35px;
+  }
+
+  .about-content h3 {
+    font-size: 27px;
+  }
+
+  .about-content p {
+    font-size: 13px;
+  }
+
+  .about-feature {
+    padding: 20px;
+
+    gap: 15px;
+  }
+
+  .about-feature h3 {
+    font-size: 15px;
+  }
+
+  .about-feature p {
+    font-size: 12px;
+  }
+
+  .feature-number {
+    min-width: 35px;
+  }
+
+  /* =======================================================
+     GAMES
+  ======================================================= */
+
+  .games-section {
+    padding: 75px 0 60px;
+  }
+
+  .games-heading {
+    margin-bottom: 40px;
+  }
+
+  .games-heading span {
+    font-size: 11px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .games-heading h2 {
+    font-size: 28px;
+  }
+
+  .games-container {
+    padding: 0 20px;
+
+    gap: 35px;
+  }
+
+  .games-description {
+    font-size: 13px;
+  }
+
+  .rate-card {
+    padding: 19px 18px;
+  }
+
+  .rate-name span {
+    font-size: 15px;
+  }
+
+  .rate-name small {
+    font-size: 12px;
+  }
+
+  .rate-value {
+    font-size: 21px;
+  }
+
+  .games-image img {
+    max-width: 300px;
+  }
+
+  /* =======================================================
+     HOW TO PLAY
+  ======================================================= */
+
+  .how-to-play-section {
+    padding: 75px 0 60px;
+  }
+
+  .how-to-play-heading {
+    margin-bottom: 40px;
+  }
+
+  .how-to-play-heading span {
+    font-size: 11px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .how-to-play-heading h2 {
+    font-size: 28px;
+  }
+
+  .how-to-play-heading p {
+    font-size: 13px;
+  }
+
+  .how-to-play-container {
+    padding: 0 20px;
+
+    gap: 15px;
+  }
+
+  .play-step {
+    padding: 20px;
+
+    gap: 15px;
+  }
+
+  .step-number {
+    min-width: 35px;
+  }
+
+  .step-content h3 {
+    font-size: 15px;
+  }
+
+  .step-content p {
+    font-size: 12px;
+  }
+
+  /* =======================================================
+     FOOTER
+  ======================================================= */
+
+  .footer {
+    padding: 16px 15px;
+  }
+
+  .footer p {
+    font-size: 13px;
+  }
+}

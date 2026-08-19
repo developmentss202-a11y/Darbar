@@ -4,6 +4,7 @@
 
 :root {
   /* Colors */
+  --border-color: #dbdbdb;
   --color-primary: #8b1e2d;
   --color-primary-dark: #691521;
   --color-primary-light: #f8e9eb;
@@ -83,6 +84,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 html,
@@ -94,10 +96,6 @@ body,
   padding: 0;
 }
 
-html {
-  overflow: hidden;
-}
-
 body {
   min-height: 100vh;
 
@@ -105,15 +103,11 @@ body {
   color: var(--color-text-primary);
 
   font-family: var(--font-family);
-
-  overflow: hidden;
 }
 
 #root {
   width: 100%;
   height: 100vh;
-
-  overflow: hidden;
 }
 
 button,
@@ -1277,6 +1271,32 @@ input {
   color: var(--color-primary);
 
   text-decoration: underline;
+}
+
+.header-actions .telegram-action {
+  padding: 0 12px;
+}
+
+.telegram-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+
+  color: var(--color-text-primary);
+}
+
+.telegram-content img {
+  width: 22px;
+  height: 22px;
+
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* ============================================================

@@ -82,6 +82,7 @@ const SignIn = ({ onSignIn }) => {
       mobile,
       password,
     });
+    navigate("/");
 
     if (onSignIn) {
       onSignIn({

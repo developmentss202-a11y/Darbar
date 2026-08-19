@@ -1,0 +1,583 @@
+/* ============================================================
+   APP HEADER
+   ============================================================ */
+
+.app-header {
+  width: 100%;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  background: var(--color-white);
+
+  border-bottom: 1px solid var(--color-border-light);
+
+  box-shadow: var(--shadow-sm);
+
+  position: relative;
+  z-index: 1000;
+}
+
+/* ============================================================
+   HEADER LEFT
+   ============================================================ */
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   HEADER LOGO
+   ============================================================ */
+
+.header-logo {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.header-logo img {
+  width: 42px;
+  height: 42px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.header-brand-name {
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xl);
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: -0.3px;
+}
+
+/* ============================================================
+   HEADER ACTIONS
+   ============================================================ */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* ============================================================
+   COMMON HEADER ACTION
+   ============================================================ */
+
+.header-action {
+  height: 44px;
+
+  min-width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-border-light);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-white);
+
+  color: var(--color-text-primary);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+
+  position: relative;
+}
+
+.header-action:hover {
+  border-color: var(--color-primary);
+
+  color: var(--color-primary);
+
+  background: var(--color-primary-light);
+}
+
+.header-action-icon {
+  font-size: 20px;
+
+  line-height: 1;
+}
+
+/* ============================================================
+   WALLET
+   ============================================================ */
+
+.header-wallet {
+  min-width: 120px;
+
+  justify-content: flex-start;
+
+  gap: 8px;
+
+  padding: 0 12px;
+}
+
+.wallet-info {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  line-height: 1.1;
+}
+
+.wallet-label {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-regular);
+}
+
+.wallet-balance {
+  margin-top: 3px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   NOTIFICATION
+   ============================================================ */
+
+.notification-button {
+  position: relative;
+}
+
+.notification-dot {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: var(--radius-round);
+
+  background: var(--color-primary);
+
+  border: 1px solid var(--color-white);
+}
+
+/* ============================================================
+   HAMBURGER BUTTON
+   ============================================================ */
+
+.menu-button {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  border: 1px solid var(--color-border-light);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-white);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.menu-button:hover,
+.menu-button.active {
+  border-color: var(--color-primary);
+
+  background: var(--color-primary-light);
+}
+
+.menu-button span {
+  width: 19px;
+  height: 2px;
+
+  display: block;
+
+  border-radius: 2px;
+
+  background: var(--color-text-primary);
+
+  transition: var(--transition-fast);
+}
+
+.menu-button:hover span,
+.menu-button.active span {
+  background: var(--color-primary);
+}
+
+/* ============================================================
+   MENU OVERLAY
+   ============================================================ */
+
+.menu-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.25);
+
+  z-index: 1090;
+}
+
+/* ============================================================
+   SIDE MENU
+   ============================================================ */
+
+.side-menu {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+
+  width: 340px;
+  max-width: 90vw;
+
+  height: 100vh;
+
+  background: var(--color-white);
+
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.12);
+
+  z-index: 1100;
+
+  overflow-y: auto;
+
+  transform: translateX(100%);
+
+  transition: transform 0.25s ease;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+/* ============================================================
+   SIDE MENU PROFILE
+   ============================================================ */
+
+.side-menu-profile {
+  min-height: 105px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 24px;
+}
+
+/* ============================================================
+   GUEST AVATAR
+   ============================================================ */
+
+.guest-avatar {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius-round);
+
+  background: var(--color-primary-light);
+
+  border: 1px solid rgba(139, 30, 45, 0.15);
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xl);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   GUEST INFO
+   ============================================================ */
+
+.guest-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.guest-label {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.guest-name {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-lg);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+.side-menu-divider {
+  height: 1px;
+
+  margin: 0 20px;
+
+  background: var(--color-border-light);
+}
+
+/* ============================================================
+   MENU NAV
+   ============================================================ */
+
+.side-menu-nav {
+  padding: 14px 12px 20px;
+}
+
+/* ============================================================
+   MENU ITEM
+   ============================================================ */
+
+.side-menu-item {
+  width: 100%;
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 0 14px;
+
+  margin-bottom: 3px;
+
+  border: none;
+
+  border-radius: var(--radius-md);
+
+  background: transparent;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+
+  font-weight: var(--font-weight-medium);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.side-menu-item:hover {
+  background: var(--color-primary-light);
+
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   ACTIVE MENU ITEM
+   ============================================================ */
+
+.side-menu-item.active {
+  background: var(--color-primary-light);
+
+  color: var(--color-primary);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   MENU ICON
+   ============================================================ */
+
+.side-menu-icon {
+  width: 24px;
+  min-width: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: currentColor;
+
+  font-size: 17px;
+
+  line-height: 1;
+}
+
+/* ============================================================
+   MENU LABEL
+   ============================================================ */
+
+.side-menu-label {
+  flex: 1;
+}
+
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
+.logout-divider {
+  height: 1px;
+
+  margin: 12px 8px;
+
+  background: var(--color-border-light);
+}
+
+.logout-item {
+  color: var(--color-error);
+}
+
+.logout-item:hover {
+  color: var(--color-error);
+
+  background: var(--color-error-bg);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+.side-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.side-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.side-menu::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+
+  border-radius: 10px;
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .app-header {
+    height: 64px;
+
+    padding: 0 16px;
+  }
+
+  .header-logo img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .header-brand-name {
+    font-size: var(--font-size-lg);
+  }
+
+  .header-wallet {
+    min-width: 44px;
+
+    width: 44px;
+
+    padding: 0;
+
+    justify-content: center;
+  }
+
+  .wallet-info {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .header-action,
+  .menu-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .side-menu {
+    width: 320px;
+  }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .app-header {
+    height: 60px;
+
+    padding: 0 12px;
+  }
+
+  .header-brand-name {
+    display: none;
+  }
+
+  .header-logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-action,
+  .menu-button {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+  }
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .side-menu {
+    width: 300px;
+  }
+
+  .side-menu-profile {
+    padding: 20px;
+  }
+}
