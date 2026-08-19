@@ -1,7 +1,14 @@
 import React from "react";
 import logo3 from "../../assets/logo3.png";
+import { useNavigate } from "react-router-dom";
 
 const LandingHome = () => {
+  const navigate = useNavigate();
+
+  const onClickPlay = () => {
+    navigate("/login");
+  };
+
   return (
     <div>
       <section id="home" className="home-section">
@@ -20,7 +27,9 @@ const LandingHome = () => {
 
             <p>Enjoy smooth gameplay and endless entertainment.</p>
 
-            <button className="download-btn">Play Now</button>
+            <button className="download-btn" onClick={onClickPlay}>
+              Play Now
+            </button>
           </div>
         </div>
       </section>

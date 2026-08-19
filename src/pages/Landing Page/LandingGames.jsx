@@ -1,5 +1,5 @@
 import React from "react";
-// import gameImage from "../../assets/games.png";
+import gameImage from "../../assets/gold-coins.png";
 
 const LandingGames = () => {
   return (
@@ -8,7 +8,11 @@ const LandingGames = () => {
           TOP HEADING
       ========================= */}
       <div className="games-heading">
-        <h2>RATE CHART</h2>
+        <span>RATE CHART</span>
+
+        <h2>
+          Know the Rates, <strong>Play Smart</strong>
+        </h2>
       </div>
 
       {/* =========================
@@ -46,12 +50,7 @@ const LandingGames = () => {
 
         {/* Right - Image */}
         <div className="games-image">
-          {/* 
-          <img
-            src={gameImage}
-            alt="GVSC Games"
-          />
-          */}
+          <img src={gameImage} alt="GVSC Coins" />
         </div>
       </div>
     </section>

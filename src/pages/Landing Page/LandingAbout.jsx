@@ -5,7 +5,7 @@ const LandingAbout = () => {
     <section id="about" className="about-section">
       {/* Section Heading */}
       <div className="about-heading">
-        {/* <span>ABOUT US</span> */}
+        <span>ABOUT US</span>
         <h2>
           Get to Know <strong>GVSC</strong>
         </h2>
