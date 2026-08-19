@@ -1,0 +1,1918 @@
+/* ============================================================
+   GLOBAL VARIABLES
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --color-primary: #8b1e2d;
+  --color-primary-dark: #691521;
+  --color-primary-light: #f8e9eb;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-text-primary: #222222;
+  --color-text-secondary: #777777;
+  --color-text-muted: #999999;
+
+  --color-border: #dddddd;
+  --color-border-light: #eeeeee;
+
+  --color-background: #f7f7f7;
+  --color-background-light: #fafafa;
+
+  --color-success: #18794e;
+  --color-success-bg: #eaf8f1;
+
+  --color-error: #c62828;
+  --color-error-bg: #fff0f0;
+
+  /* Typography */
+  --font-family: "Poppins", sans-serif;
+
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 13px;
+  --font-size-lg: 14px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 26px;
+  --font-size-3xl: 30px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-xs: 5px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 28px;
+  --spacing-3xl: 40px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-round: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+  /* Layout */
+  --auth-width: 460px;
+  --input-height: 50px;
+  --button-height: 50px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.25s ease;
+}
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  min-height: 100vh;
+
+  background: var(--color-background);
+  color: var(--color-text-primary);
+
+  font-family: var(--font-family);
+
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+}
+
+button,
+input {
+  font-family: var(--font-family);
+}
+
+/* ============================================================
+   AUTH PAGE
+   ============================================================ */
+
+.auth-page {
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px 20px;
+
+  background: var(--color-background);
+
+  overflow: hidden;
+}
+
+/* ============================================================
+   AUTH CARD
+   ============================================================ */
+
+.auth-card {
+  width: 100%;
+  max-width: var(--auth-width);
+
+  background: var(--color-white);
+
+  padding: 32px 40px;
+
+  border-radius: var(--radius-2xl);
+
+  box-shadow: var(--shadow-lg);
+
+  position: relative;
+
+  overflow: hidden;
+
+  /*
+    IMPORTANT:
+    Card is allowed to fit inside the viewport.
+  */
+  max-height: calc(100vh - 60px);
+}
+
+/* ============================================================
+   SIGN UP CARD
+   ============================================================ */
+
+.signup-card {
+  min-height: 0;
+}
+
+/* ============================================================
+   SIGN IN CARD
+   ============================================================ */
+
+.signin-card {
+  min-height: 0;
+}
+
+/* ============================================================
+   AUTH LOGO
+   ============================================================ */
+
+.auth-logo {
+  width: 70px;
+  height: 70px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* ============================================================
+   AUTH HEADER
+   ============================================================ */
+
+.auth-header {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+.auth-title {
+  margin: 0 0 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+
+  line-height: 1.3;
+}
+
+.auth-subtitle {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   AUTH FORM
+   ============================================================ */
+
+.auth-form {
+  width: 100%;
+}
+
+/* ============================================================
+   FORM GROUP
+   ============================================================ */
+
+.form-group {
+  width: 100%;
+
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   FORM LABEL
+   ============================================================ */
+
+.form-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+
+  line-height: 1.3;
+}
+
+/* ============================================================
+   INPUT CONTAINER
+   ============================================================ */
+
+.input-container {
+  width: 100%;
+  height: var(--input-height);
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-white);
+
+  padding: 0 var(--spacing-md);
+
+  transition: var(--transition-fast);
+}
+
+.input-container:focus-within {
+  border-color: var(--color-primary);
+
+  box-shadow: 0 0 0 3px rgba(139, 30, 45, 0.08);
+}
+
+/* ============================================================
+   ERROR INPUT
+   ============================================================ */
+
+.input-container.input-error {
+  border-color: #ff3333;
+
+  box-shadow: none;
+}
+
+/* ============================================================
+   FORM INPUT
+   ============================================================ */
+
+.form-input {
+  flex: 1;
+
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+
+  padding: 0 var(--spacing-sm);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   INPUT ICON
+   ============================================================ */
+
+.input-icon {
+  width: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-md);
+
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   COUNTRY CODE
+   ============================================================ */
+
+.input-country-code {
+  min-width: 38px;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+
+  border-right: 1px solid var(--color-border);
+
+  padding-right: var(--spacing-sm);
+
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FIELD ERROR
+   ============================================================ */
+
+.field-error {
+  min-height: 17px;
+
+  padding-top: 3px;
+
+  color: var(--color-error);
+
+  font-size: 11px;
+  font-weight: var(--font-weight-regular);
+
+  line-height: 14px;
+}
+
+/*
+  IMPORTANT:
+
+  The error space always exists because of min-height.
+
+  Therefore:
+
+  BEFORE ERROR:
+  input
+  empty space
+
+  AFTER ERROR:
+  input
+  error
+
+  The fields below don't jump around.
+*/
+
+/* ============================================================
+   PRIMARY BUTTON
+   ============================================================ */
+
+.primary-button {
+  width: 100%;
+  height: var(--button-height);
+
+  margin-top: 2px;
+
+  border: none;
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-primary);
+
+  color: var(--color-white);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: var(--transition-normal);
+}
+
+.primary-button:hover {
+  background: var(--color-primary-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   AUTH FOOTER
+   ============================================================ */
+
+.auth-footer {
+  margin-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: var(--spacing-xs);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-sm);
+}
+
+.text-button {
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+}
+
+.text-button:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   SIGN IN LABEL ROW
+   ============================================================ */
+
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+}
+
+.form-label-row .form-label {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   FORGOT PASSWORD
+   ============================================================ */
+
+.forgot-password-button {
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.forgot-password-button:hover {
+  color: var(--color-primary-dark);
+
+  text-decoration: underline;
+}
+
+/* ============================================================
+   PASSWORD TOGGLE
+   ============================================================ */
+
+.password-toggle {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition: var(--transition-fast);
+}
+
+.password-toggle:hover {
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   DEMO BOX
+   ============================================================ */
+
+.demo-box {
+  width: 100%;
+
+  margin-top: 16px;
+
+  padding: 10px 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+
+  border: 1px dashed #d8a3aa;
+
+  border-radius: var(--radius-md);
+
+  background: var(--color-primary-light);
+
+  color: #6d2731;
+
+  font-size: var(--font-size-xs);
+}
+
+.demo-box strong {
+  margin-bottom: 2px;
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   OLD FORM MESSAGE
+   ============================================================ */
+
+/*
+   We no longer use the big error box at the top.
+
+   Keeping these classes here won't hurt if another page
+   still uses them.
+*/
+
+.form-message {
+  width: 100%;
+
+  margin-bottom: var(--spacing-lg);
+
+  padding: var(--spacing-md);
+
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-sm);
+}
+
+.form-message--error {
+  color: var(--color-error);
+
+  background: var(--color-error-bg);
+
+  border: 1px solid #ffd4d4;
+}
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+
+.back-button {
+  position: absolute;
+
+  top: var(--spacing-xl);
+  left: var(--spacing-xl);
+
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-xs);
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.back-button:hover {
+  color: var(--color-primary);
+}
+
+.back-button__icon {
+  font-size: var(--font-size-xl);
+
+  line-height: 1;
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.otp-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.otp-input {
+  width: 48px;
+  height: 52px;
+  text-align: center;
+  font-size: 22px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.otp-input:focus {
+  border-color: #000;
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 14px;
+  margin: 8px 0 15px;
+}
+
+.link-text {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-page {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  padding: var(--spacing-xl);
+
+  background: var(--color-background);
+
+  overflow: hidden;
+}
+
+.otp-page {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--spacing-xl);
+
+  background: var(--color-background);
+
+  overflow: hidden;
+}
+
+.otp-card {
+  width: 100%;
+  max-width: var(--auth-width);
+
+  padding: 32px 40px;
+
+  background: var(--color-white);
+
+  border-radius: var(--radius-2xl);
+
+  box-shadow: var(--shadow-lg);
+
+  position: relative;
+
+  margin: 0;
+
+  flex-shrink: 0;
+}
+
+.otp-logo {
+  width: 70px;
+  height: 70px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.otp-header {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+.otp-title {
+  margin: 0 0 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-2xl);
+
+  font-weight: var(--font-weight-semibold);
+
+  line-height: 1.3;
+}
+
+.otp-subtitle {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+
+  font-weight: var(--font-weight-regular);
+
+  line-height: 1.5;
+}
+
+.otp-form {
+  width: 100%;
+}
+
+.otp-form-group {
+  width: 100%;
+
+  margin-bottom: 14px;
+}
+
+.otp-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+
+  font-weight: var(--font-weight-medium);
+
+  line-height: 1.3;
+}
+
+.otp-input-container {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin: 20px 0;
+}
+
+.otp-digit {
+  width: 48px;
+  height: 52px;
+
+  flex: 0 0 48px;
+
+  padding: 0;
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-lg);
+
+  outline: none;
+
+  background: var(--color-white);
+
+  color: var(--color-text-primary);
+
+  text-align: center;
+
+  font-size: 22px;
+
+  font-weight: var(--font-weight-medium);
+
+  transition: var(--transition-fast);
+}
+
+.otp-digit:focus {
+  border-color: var(--color-primary);
+
+  box-shadow: 0 0 0 3px rgba(139, 30, 45, 0.08);
+}
+
+.otp-digit-error {
+  border-color: var(--color-error);
+}
+
+.otp-digit-error:focus {
+  border-color: var(--color-error);
+
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08);
+}
+
+.otp-error {
+  min-height: 17px;
+
+  padding-top: 3px;
+
+  color: var(--color-error);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-regular);
+
+  line-height: 14px;
+
+  text-align: left;
+}
+
+.otp-verify-button {
+  width: 100%;
+  height: var(--button-height);
+
+  margin-top: 2px;
+
+  border: none;
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-primary);
+
+  color: var(--color-white);
+
+  font-size: var(--font-size-lg);
+
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: var(--transition-normal);
+}
+
+.otp-verify-button:hover {
+  background: var(--color-primary-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.otp-verify-button:active {
+  transform: translateY(0);
+}
+
+.otp-footer {
+  margin-top: 18px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: var(--spacing-xs);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-sm);
+}
+
+.otp-resend-button {
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.otp-resend-button:hover {
+  color: var(--color-primary-dark);
+
+  text-decoration: underline;
+}
+
+/* ============================================================
+   SET MPIN PAGE
+   ============================================================ */
+
+.mpin-card {
+  max-width: var(--auth-width);
+}
+
+.mpin-input {
+  text-align: left;
+  letter-spacing: 4px;
+}
+
+.field-error-visible {
+  color: var(--color-error);
+}
+
+.mpin-card .form-group {
+  margin-bottom: 14px;
+}
+
+.mpin-card .primary-button {
+  margin-top: 2px;
+}
+
+/* ============================================================
+   MPIN PAGE
+   Uses existing variables from :root
+   ============================================================ */
+
+.mpin-page {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--spacing-xl);
+
+  background: var(--color-background);
+
+  overflow: hidden;
+
+  z-index: 1;
+}
+
+/* ============================================================
+   MPIN CARD
+   ============================================================ */
+
+.mpin-card {
+  width: 100%;
+  max-width: var(--auth-width);
+
+  padding: 32px 40px;
+
+  background: var(--color-white);
+
+  border-radius: var(--radius-2xl);
+
+  box-shadow: var(--shadow-lg);
+
+  position: relative;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+}
+
+/* ============================================================
+   MPIN LOGO
+   ============================================================ */
+
+.mpin-logo {
+  width: 70px;
+  height: 70px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mpin-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* ============================================================
+   MPIN HEADER
+   ============================================================ */
+
+.mpin-header {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+.mpin-title {
+  margin: 0 0 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+
+  line-height: 1.3;
+}
+
+.mpin-subtitle {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   MPIN FORM
+   ============================================================ */
+
+.mpin-form {
+  width: 100%;
+}
+
+.mpin-group {
+  width: 100%;
+
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   MPIN LABEL
+   ============================================================ */
+
+.mpin-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+
+  line-height: 1.3;
+
+  text-align: center;
+}
+
+/* ============================================================
+   MPIN BOXES
+   Same style as OTP boxes
+   ============================================================ */
+
+.mpin-input-container {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin: 20px 0;
+}
+
+.mpin-input {
+  width: 48px;
+  height: 52px;
+
+  padding: 0;
+
+  text-align: center;
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-md);
+
+  outline: none;
+
+  background: var(--color-white);
+
+  color: var(--color-text-primary);
+
+  font-size: 22px;
+  font-weight: var(--font-weight-medium);
+
+  transition: var(--transition-fast);
+}
+
+.mpin-input:focus {
+  border-color: var(--color-primary);
+
+  box-shadow: 0 0 0 3px rgba(139, 30, 45, 0.08);
+}
+
+/* ============================================================
+   MPIN ERROR
+   ============================================================ */
+
+.mpin-input-error {
+  border-color: var(--color-error);
+}
+
+.mpin-input-error:focus {
+  border-color: var(--color-error);
+
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08);
+}
+
+.mpin-field-error {
+  min-height: 17px;
+
+  padding-top: 3px;
+
+  color: var(--color-error);
+
+  font-size: var(--font-size-xs);
+
+  line-height: 14px;
+
+  text-align: center;
+}
+
+/* ============================================================
+   SET MPIN BUTTON
+   ============================================================ */
+
+.mpin-primary-button {
+  width: 100%;
+  height: var(--button-height);
+
+  margin-top: 2px;
+
+  border: none;
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-primary);
+
+  color: var(--color-white);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: var(--transition-normal);
+}
+
+.mpin-primary-button:hover {
+  background: var(--color-primary-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.mpin-primary-button:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   SKIP BUTTON
+   ============================================================ */
+
+.mpin-skip-button {
+  display: block;
+
+  margin: 18px auto 0;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--color-text-secondary);
+
+  font-family: var(--font-family);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.mpin-skip-button:hover {
+  color: var(--color-primary);
+
+  text-decoration: underline;
+}
+
+/* ============================================================
+   TABLET / SMALL LAPTOP
+   ============================================================ */
+
+@media (max-height: 750px) {
+  .mpin-page {
+    padding: var(--spacing-lg);
+  }
+
+  .mpin-card {
+    padding: 26px 34px;
+  }
+
+  .mpin-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .mpin-header {
+    margin-bottom: 16px;
+  }
+
+  .mpin-title {
+    font-size: 23px;
+  }
+
+  .mpin-input-container {
+    margin: 16px 0;
+  }
+
+  .mpin-input {
+    width: 46px;
+    height: 46px;
+  }
+
+  .mpin-field-error {
+    min-height: 15px;
+  }
+
+  .mpin-primary-button {
+    height: 46px;
+  }
+
+  .mpin-skip-button {
+    margin-top: 14px;
+  }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .mpin-page {
+    width: 100vw;
+    height: 100vh;
+
+    padding: var(--spacing-lg);
+  }
+
+  .mpin-card {
+    width: 100%;
+
+    max-width: var(--auth-width);
+
+    padding: 24px 20px;
+
+    border-radius: var(--radius-xl);
+
+    max-height: calc(100vh - 32px);
+  }
+
+  .mpin-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .mpin-title {
+    font-size: 22px;
+  }
+
+  .mpin-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .mpin-header {
+    margin-bottom: 18px;
+  }
+
+  .mpin-input-container {
+    gap: 8px;
+
+    margin: 18px 0;
+  }
+
+  .mpin-input {
+    width: 44px;
+    height: 48px;
+
+    font-size: var(--font-size-xl);
+  }
+
+  .mpin-primary-button {
+    height: 46px;
+  }
+
+  .mpin-skip-button {
+    margin-top: 14px;
+  }
+}
+
+/* ============================================================
+   VERY SHORT SCREENS
+   ============================================================ */
+
+@media (max-height: 600px) {
+  .mpin-page {
+    padding: var(--spacing-sm);
+  }
+
+  .mpin-card {
+    padding: 18px 24px;
+  }
+
+  .mpin-logo {
+    width: 45px;
+    height: 45px;
+
+    margin-bottom: 6px;
+  }
+
+  .mpin-header {
+    margin-bottom: 10px;
+  }
+
+  .mpin-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .mpin-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .mpin-input-container {
+    margin: 12px 0;
+
+    gap: 7px;
+  }
+
+  .mpin-input {
+    width: 40px;
+    height: 42px;
+
+    font-size: 18px;
+  }
+
+  .mpin-field-error {
+    min-height: 13px;
+
+    font-size: 10px;
+
+    line-height: 12px;
+  }
+
+  .mpin-primary-button {
+    height: 40px;
+  }
+
+  .mpin-skip-button {
+    margin-top: var(--spacing-sm);
+  }
+}
+
+@media (max-height: 750px) {
+  .otp-page {
+    padding: var(--spacing-lg);
+  }
+
+  .otp-card {
+    padding: 26px 34px;
+  }
+
+  .otp-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .otp-header {
+    margin-bottom: 16px;
+  }
+
+  .otp-title {
+    font-size: 23px;
+  }
+
+  .otp-form-group {
+    margin-bottom: 10px;
+  }
+
+  .otp-input-container {
+    margin: 16px 0;
+  }
+
+  .otp-digit {
+    width: 46px;
+    height: 48px;
+
+    flex-basis: 46px;
+  }
+
+  .otp-verify-button {
+    height: 46px;
+  }
+
+  .otp-footer {
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .otp-page {
+    width: 100vw;
+    height: 100vh;
+
+    padding: var(--spacing-lg);
+  }
+
+  .otp-card {
+    width: 100%;
+    max-width: var(--auth-width);
+
+    padding: 24px 20px;
+
+    border-radius: var(--radius-xl);
+  }
+
+  .otp-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .otp-title {
+    font-size: 22px;
+  }
+
+  .otp-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .otp-header {
+    margin-bottom: 18px;
+  }
+
+  .otp-label {
+    font-size: var(--font-size-md);
+  }
+
+  .otp-input-container {
+    gap: 7px;
+
+    margin: 16px 0;
+  }
+
+  .otp-digit {
+    width: 42px;
+    height: 48px;
+
+    flex: 0 0 42px;
+
+    font-size: 20px;
+  }
+
+  .otp-verify-button {
+    height: 46px;
+  }
+
+  .otp-footer {
+    margin-top: 14px;
+  }
+}
+
+@media (max-height: 600px) {
+  .otp-page {
+    padding: var(--spacing-sm);
+  }
+
+  .otp-card {
+    padding: 18px 24px;
+  }
+
+  .otp-logo {
+    width: 45px;
+    height: 45px;
+
+    margin-bottom: 6px;
+  }
+
+  .otp-header {
+    margin-bottom: 10px;
+  }
+
+  .otp-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .otp-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .otp-label {
+    margin-bottom: 3px;
+  }
+
+  .otp-input-container {
+    margin: 10px 0;
+
+    gap: 6px;
+  }
+
+  .otp-digit {
+    width: 40px;
+    height: 42px;
+
+    flex-basis: 40px;
+
+    font-size: 18px;
+  }
+
+  .otp-error {
+    min-height: 13px;
+
+    font-size: 10px;
+
+    line-height: 12px;
+  }
+
+  .otp-verify-button {
+    height: 40px;
+  }
+
+  .otp-footer {
+    margin-top: 8px;
+  }
+}
+
+.new-password-card {
+  min-height: 0;
+}
+
+.new-password-success {
+  width: 100%;
+
+  min-height: 17px;
+
+  padding-top: 3px;
+
+  margin-bottom: 2px;
+
+  color: var(--color-success);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-regular);
+
+  line-height: 14px;
+
+  text-align: left;
+
+  visibility: hidden;
+}
+
+.new-password-success-visible {
+  visibility: visible;
+}
+
+.new-password-card .input-container.input-error {
+  border-color: var(--color-error);
+
+  box-shadow: none;
+}
+
+.new-password-card .input-container.input-error:focus-within {
+  border-color: var(--color-error);
+
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08);
+}
+
+.new-password-card .field-error {
+  min-height: 17px;
+
+  padding-top: 3px;
+
+  color: var(--color-error);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-regular);
+
+  line-height: 14px;
+
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .new-password-card {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-height: 600px) {
+  .new-password-card {
+    padding: 18px 24px;
+  }
+
+  .new-password-card .field-error {
+    min-height: 13px;
+
+    padding-top: 2px;
+
+    font-size: 10px;
+
+    line-height: 12px;
+  }
+
+  .new-password-success {
+    min-height: 13px;
+
+    font-size: 10px;
+
+    line-height: 12px;
+  }
+}
+
+/* ============================================================
+   TABLET / SMALL LAPTOP
+   ============================================================ */
+
+@media (max-height: 750px) {
+  .auth-page {
+    padding: 20px;
+  }
+
+  .auth-card {
+    padding: 26px 34px;
+  }
+
+  .auth-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .auth-header {
+    margin-bottom: 16px;
+  }
+
+  .auth-title {
+    font-size: 23px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    margin-bottom: 5px;
+  }
+
+  .input-container {
+    height: 46px;
+  }
+
+  .field-error {
+    min-height: 15px;
+    padding-top: 2px;
+  }
+
+  .primary-button {
+    height: 46px;
+  }
+
+  .auth-footer {
+    margin-top: 14px;
+  }
+
+  .demo-box {
+    margin-top: 12px;
+  }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .auth-page {
+    width: 100%;
+    height: 100vh;
+
+    padding: 16px;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: var(--auth-width);
+
+    max-height: calc(100vh - 32px);
+
+    padding: 24px 20px;
+
+    border-radius: var(--radius-xl);
+
+    overflow: hidden;
+  }
+
+  .auth-logo {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 10px;
+  }
+
+  .auth-title {
+    font-size: 22px;
+  }
+
+  .auth-subtitle {
+    font-size: 12px;
+  }
+
+  .auth-header {
+    margin-bottom: 18px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    font-size: 13px;
+  }
+
+  .input-container {
+    height: 46px;
+  }
+
+  .primary-button {
+    height: 46px;
+  }
+
+  .auth-footer {
+    margin-top: 14px;
+  }
+
+  .back-button {
+    top: var(--spacing-lg);
+    left: var(--spacing-lg);
+  }
+}
+
+/* ============================================================
+   VERY SHORT SCREENS
+   ============================================================ */
+
+@media (max-height: 600px) {
+  .auth-page {
+    padding: 10px;
+  }
+
+  .auth-card {
+    padding: 18px 24px;
+  }
+
+  .auth-logo {
+    width: 45px;
+    height: 45px;
+
+    margin-bottom: 6px;
+  }
+
+  .auth-header {
+    margin-bottom: 10px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+  }
+
+  .auth-subtitle {
+    font-size: 11px;
+  }
+
+  .form-group {
+    margin-bottom: 6px;
+  }
+
+  .form-label {
+    margin-bottom: 3px;
+  }
+
+  .input-container {
+    height: 40px;
+  }
+
+  .field-error {
+    min-height: 13px;
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .primary-button {
+    height: 40px;
+  }
+
+  .auth-footer {
+    margin-top: 8px;
+  }
+
+  .demo-box {
+    margin-top: 8px;
+    padding: 7px 10px;
+  }
+}
