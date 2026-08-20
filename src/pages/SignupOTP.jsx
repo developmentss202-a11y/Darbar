@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import gvscLogo from "../assets/Logo3.png";
 import "../index.css";
 
 const SignupOTP = () => {
@@ -121,7 +122,7 @@ const SignupOTP = () => {
       <div className="otp-card">
         {/* Logo */}
         <div className="otp-logo">
-          <img src="/src/assets/darbar-logo.png" alt="Darbar Logo" />
+          <img src={gvscLogo} alt="GVSC Logo" />
         </div>
 
         {/* Header */}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./css/Landing.css";
 import Logo3 from "../../assets/Logo3.png";
 import { useNavigate } from "react-router-dom";
 
@@ -126,7 +125,7 @@ export default function LandingHeader() {
         ========================= */}
 
         <a href="#home" className="logo-wrapper" onClick={handleLogoClick}>
-          <img src={Logo3} alt="GVSC Logo" className="header-logo" />
+          <img src={Logo3} alt="GVSC Logo" className="landing-header-logo" />
         </a>
 
         {/* =========================

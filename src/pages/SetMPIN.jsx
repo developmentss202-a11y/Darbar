@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import gvscLogo from "../assets/Logo3.png";
 import "../index.css";
 
 function MPIN() {
@@ -51,11 +52,11 @@ function MPIN() {
     // Save MPIN through backend later
     console.log("MPIN:", enteredMPIN);
 
-    navigate("/home");
+    navigate("/dashboard");
   };
 
   const handleSkip = () => {
-    navigate("/home");
+    navigate("/dashboard");
   };
 
   return (
@@ -63,7 +64,7 @@ function MPIN() {
       <div className="mpin-card">
         {/* Logo */}
         <div className="mpin-logo">
-          <img src="/src/assets/darbar-logo.png" alt="Darbar Logo" />
+          <img src={gvscLogo} alt="Darbar Logo" />
         </div>
 
         {/* Header */}

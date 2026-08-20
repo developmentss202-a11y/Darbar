@@ -12,7 +12,7 @@
 
   padding: 0 28px;
 
-  background: var(--color-white);
+  background: var(--color-text-primary);
 
   border-bottom: 1px solid var(--color-border-light);
 
@@ -129,7 +129,7 @@
    ============================================================ */
 
 .telegram-action {
-  padding: 0 10px;
+  padding: 0 12px;
 
   min-width: auto;
 }
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 8px;
 
   line-height: 1;
 }
@@ -151,7 +151,7 @@
 */
 
 .telegram-content span {
-  font-size: 12px;
+  font-size: 13px;
 
   font-weight: 600;
 
@@ -161,8 +161,8 @@
 }
 
 .telegram-content img {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 
   display: block;
 
@@ -318,7 +318,7 @@
 
   height: 100vh;
 
-  background: var(--color-white);
+  background: var(--color-text-primary);
 
   border-right: 1px solid var(--color-border-light);
 
@@ -369,11 +369,11 @@
 
   border-radius: var(--radius-round);
 
-  background: var(--color-primary-light);
+  background: var(--color-primary);
 
-  border: 1px solid rgba(139, 30, 45, 0.15);
+  border: 1px solid rgba(245, 166, 35, 0.4);
 
-  color: var(--color-primary);
+  color: var(--color-white);
 
   font-size: var(--font-size-xl);
 
@@ -392,13 +392,15 @@
 }
 
 .guest-label {
-  color: var(--color-text-muted);
+  color: rgba(255, 255, 255, 0.62);
 
   font-size: var(--font-size-xs);
+
+  letter-spacing: 0.2px;
 }
 
 .guest-name {
-  color: var(--color-text-primary);
+  color: var(--color-white);
 
   font-size: var(--font-size-lg);
 
@@ -414,7 +416,7 @@
 
   margin: 0 20px;
 
-  background: var(--color-border-light);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ============================================================
@@ -448,7 +450,7 @@
 
   background: transparent;
 
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.9);
 
   font-size: var(--font-size-md);
 
@@ -462,9 +464,9 @@
 }
 
 .side-menu-item:hover {
-  background: var(--color-primary-light);
+  background: var(--color-primary);
 
-  color: var(--color-primary);
+  color: var(--color-black);
 }
 
 /* ============================================================
@@ -472,9 +474,9 @@
    ============================================================ */
 
 .side-menu-item.active {
-  background: var(--color-primary-light);
+  background: var(--color-primary);
 
-  color: var(--color-primary);
+  color: var(--color-black);
 
   font-weight: var(--font-weight-semibold);
 }
@@ -504,6 +506,8 @@
 
 .side-menu-label {
   flex: 1;
+
+  color: inherit;
 }
 
 /* ============================================================
@@ -515,11 +519,11 @@
 
   margin: 12px 8px;
 
-  background: var(--color-border-light);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .logout-item {
-  color: var(--color-error);
+  color: #ff6b6b;
 }
 
 .logout-item:hover {
@@ -702,8 +706,8 @@
   }
 
   .telegram-content img {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 }
 
@@ -746,8 +750,8 @@
   }
 
   .telegram-content img {
-    width: 19px;
-    height: 19px;
+    width: 22px;
+    height: 22px;
   }
 
   .side-menu {

@@ -1,6 +1,6 @@
 import React from "react";
+import "../../pages/Landing Page/css/Landing.css";
 import LandingHeader from "./LandingHeader";
-import logo3 from "../../assets/logo3.png";
 import LandingHome from "./LandingHome";
 import LandingAbout from "./LandingAbout";
 import LandingGames from "./LandingGames";

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import gvscLogo from "../assets/Logo3.png";
 import "../index.css";
 
 function NewPassword() {
@@ -109,7 +110,7 @@ function NewPassword() {
       <div className="auth-card new-password-card">
         {/* Logo */}
         <div className="auth-logo">
-          <img src="/src/assets/darbar-logo.png" alt="Darbar Logo" />
+          <img src={gvscLogo} alt="Darbar Logo" />
         </div>
 
         {/* Header */}

@@ -1,5 +1,5 @@
 import React from "react";
-import logo3 from "../../assets/logo3.png";
+import herologo from "../../assets/hero-image.png";
 import { useNavigate } from "react-router-dom";
 
 const LandingHome = () => {
@@ -15,7 +15,7 @@ const LandingHome = () => {
         <div className="home-container">
           {/* Left - Logo */}
           <div className="home-logo">
-            <img src={logo3} alt="Darbar Online" />
+            <img src={herologo} alt="Darbar Online" />
           </div>
 
           {/* Right - Content */}

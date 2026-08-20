@@ -5,8 +5,8 @@
 :root {
   /* Colors */
   --border-color: #dbdbdb;
-  --color-primary: #8b1e2d;
-  --color-primary-dark: #691521;
+  --color-primary: #f5a623;
+  --color-primary-dark: #c9820f;
   --color-primary-light: #f8e9eb;
 
   --color-white: #ffffff;
@@ -214,7 +214,7 @@ input {
 .auth-title {
   margin: 0 0 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
@@ -225,7 +225,7 @@ input {
 .auth-subtitle {
   margin: 0;
 
-  color: var(--color-text-secondary);
+  color: var(--color-text-on-light-secondary);
 
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
@@ -260,7 +260,7 @@ input {
 
   margin-bottom: 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
@@ -293,7 +293,7 @@ input {
 .input-container:focus-within {
   border-color: var(--color-primary);
 
-  box-shadow: 0 0 0 3px rgba(139, 30, 45, 0.08);
+  /* box-shadow: 0 0 0 3px rgba(139, 30, 45, 0.08); */
 }
 
 /* ============================================================
@@ -320,9 +320,6 @@ input {
   outline: none;
 
   background: transparent;
-
-  color: var(--color-text-primary);
-
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
 
@@ -775,7 +772,7 @@ input {
 .otp-title {
   margin: 0 0 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-2xl);
 
@@ -787,7 +784,7 @@ input {
 .otp-subtitle {
   margin: 0;
 
-  color: var(--color-text-secondary);
+  color: var(--color-text-on-light-secondary);
 
   font-size: var(--font-size-md);
 
@@ -811,7 +808,7 @@ input {
 
   margin-bottom: 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-md);
 
@@ -849,7 +846,7 @@ input {
 
   background: var(--color-white);
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   text-align: center;
 
@@ -1076,7 +1073,7 @@ input {
 .mpin-title {
   margin: 0 0 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
@@ -1087,7 +1084,7 @@ input {
 .mpin-subtitle {
   margin: 0;
 
-  color: var(--color-text-secondary);
+  color: var(--color-text-on-light-secondary);
 
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
@@ -1118,7 +1115,7 @@ input {
 
   margin-bottom: 6px;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
@@ -1160,7 +1157,7 @@ input {
 
   background: var(--color-white);
 
-  color: var(--color-text-primary);
+  color: var(--color-text-on-light-primary);
 
   font-size: 22px;
   font-weight: var(--font-weight-medium);
@@ -1255,7 +1252,7 @@ input {
 
   background: transparent;
 
-  color: var(--color-text-secondary);
+  color: var(--color-text-on-light-secondary);
 
   font-family: var(--font-family);
 
@@ -1275,28 +1272,6 @@ input {
 
 .header-actions .telegram-action {
   padding: 0 12px;
-}
-
-.telegram-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  font-family: var(--font-family);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
-
-  color: var(--color-text-primary);
-}
-
-.telegram-content img {
-  width: 22px;
-  height: 22px;
-
-  display: block;
-  object-fit: contain;
-  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -1486,8 +1461,8 @@ input {
   }
 
   .otp-logo {
-    width: 60px;
-    height: 60px;
+    width: 150px;
+    height: 100px;
 
     margin-bottom: 10px;
   }
@@ -1754,8 +1729,8 @@ input {
   }
 
   .auth-logo {
-    width: 60px;
-    height: 60px;
+    width: 150px;
+    height: 100px;
 
     margin-bottom: 10px;
   }
@@ -1934,5 +1909,351 @@ input {
   .demo-box {
     margin-top: 8px;
     padding: 7px 10px;
+  }
+}
+
+/* App Layout thing */
+
+.app-content {
+  margin-left: 315px;
+  padding: 16px 28px 32px 0;
+  transition: margin-left 0.3s ease;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 800px) {
+  .app-content {
+    margin-left: 20px;
+    padding: 10px;
+    transition: margin-left 0.3s ease;
+  }
+}
+
+/* ============================================================
+   DASHBOARD PAGE
+   Source file: src/pages/Dashboard.css
+   ============================================================ */
+
+.dashboard-page {
+  width: 100%;
+  /* max-width: 1120px;
+
+  padding: 18px 8px 40px 12px; */
+}
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+
+.dashboard-banner {
+  position: relative;
+
+  width: 100%;
+  min-height: 220px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-2xl);
+
+  background: #0b0b0b;
+
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-banner-image {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: right center;
+}
+
+.dashboard-banner-overlay {
+  position: relative;
+  z-index: 1;
+
+  max-width: 520px;
+
+  padding: 36px 40px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(11, 11, 11, 0.88) 0%,
+    rgba(11, 11, 11, 0.55) 70%,
+    rgba(11, 11, 11, 0) 100%
+  );
+}
+
+.dashboard-banner-kicker {
+  display: inline-block;
+
+  margin-bottom: 8px;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.dashboard-banner-title {
+  margin: 0 0 8px;
+
+  color: var(--color-white);
+
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+
+  line-height: 1.15;
+}
+
+.dashboard-banner-text {
+  margin: 0;
+
+  max-width: 360px;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: var(--font-size-md);
+
+  line-height: 1.55;
+}
+
+/* ============================================================
+   GAME CONTAINERS
+   ============================================================ */
+
+.dashboard-games {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 16px;
+
+  margin-top: 22px;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 18px 20px 16px;
+
+  background: var(--color-white);
+
+  border: 1px solid var(--color-border-light);
+
+  border-radius: var(--radius-xl);
+
+  box-shadow: var(--shadow-sm);
+
+  transition: var(--transition-fast);
+}
+
+.game-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.game-card--closed {
+  border-left: 4px solid var(--color-error);
+}
+
+.game-card--running {
+  border-left: 4px solid var(--color-success);
+}
+
+.game-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.game-card-name {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+
+  line-height: 1.2;
+}
+
+.game-card-result {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+
+  text-align: right;
+
+  white-space: nowrap;
+}
+
+.game-card-number {
+  color: var(--color-text-primary);
+}
+
+.game-card-status--closed {
+  color: var(--color-error);
+}
+
+.game-card-status--running {
+  color: var(--color-success);
+}
+
+.game-card-timer {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.game-hourglass {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: var(--radius-round);
+
+  background: rgba(245, 166, 35, 0.12);
+
+  color: var(--color-primary);
+}
+
+.game-hourglass-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.game-card--running .game-hourglass-icon {
+  animation: hourglass-flip 2.4s ease-in-out infinite;
+}
+
+.game-card-time {
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.game-play-button {
+  width: 100%;
+  height: 42px;
+
+  border: none;
+
+  border-radius: var(--radius-lg);
+
+  background: var(--color-primary);
+
+  color: var(--color-black);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.game-play-button:hover {
+  background: var(--color-primary-dark);
+
+  color: var(--color-white);
+}
+
+@keyframes hourglass-flip {
+  0%,
+  55% {
+    transform: rotate(0deg);
+  }
+
+  75%,
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .dashboard-banner {
+    min-height: 200px;
+  }
+
+  .dashboard-banner-overlay {
+    padding: 28px 24px;
+  }
+
+  .dashboard-banner-title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard-page {
+    padding: 12px 4px 32px;
+  }
+
+  .dashboard-games {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-banner-overlay {
+    max-width: 100%;
+
+    background: linear-gradient(
+      180deg,
+      rgba(11, 11, 11, 0.78) 0%,
+      rgba(11, 11, 11, 0.35) 100%
+    );
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-banner {
+    min-height: 180px;
+
+    border-radius: var(--radius-xl);
+  }
+
+  .dashboard-banner-title {
+    font-size: 22px;
+  }
+
+  .dashboard-banner-text {
+    font-size: var(--font-size-sm);
+  }
+
+  .game-card-name {
+    font-size: 18px;
   }
 }
