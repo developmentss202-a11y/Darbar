@@ -86,7 +86,7 @@ function ForgotPassword() {
           <button
             type="button"
             className="text-button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
           >
             Sign In
           </button>

@@ -36,11 +36,12 @@ export default function LandingHeader() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
+      const shell = document.querySelector(".app-shell");
+      const scrollY = shell ? shell.scrollTop : window.scrollY;
 
       setScrolled(scrollY > 20);
 
-      const headerOffset = window.innerWidth <= 800 ? 95 : 105;
+      const headerOffset = 95;
       const scrollPosition = scrollY + headerOffset;
 
       let currentSection = "home";
@@ -58,11 +59,14 @@ export default function LandingHeader() {
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    const shell = document.querySelector(".app-shell");
+    const scrollTarget = shell || window;
+
+    scrollTarget.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      scrollTarget.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
@@ -94,24 +98,6 @@ export default function LandingHeader() {
 
     handleMenuClick("home");
   };
-
-  /* =========================
-     CLOSE MENU ON DESKTOP
-  ========================= */
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 800) {
-        setMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   /* =========================
      RENDER

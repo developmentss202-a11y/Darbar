@@ -93,7 +93,7 @@ function NewPassword() {
 
     // Go to login after a short delay
     setTimeout(() => {
-      navigate("/login");
+      navigate("/");
     }, 1000);
   };
 
@@ -102,7 +102,7 @@ function NewPassword() {
   // ============================================================
 
   const handleSignIn = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (

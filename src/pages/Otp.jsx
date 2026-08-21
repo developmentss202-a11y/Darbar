@@ -192,6 +192,11 @@ const OTP = () => {
           </button>
         </form>
 
+        <div className="demo-box">
+          <strong>Demo OTP</strong>
+          <span>OTP: 123456</span>
+        </div>
+
         {/* Footer */}
         <div className="otp-footer">
           <span>Didn't receive the OTP?</span>

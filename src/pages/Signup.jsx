@@ -114,12 +114,12 @@ const SignUp = ({ onContinue }) => {
     if (onContinue) {
       onContinue(formData);
     } else {
-      navigate("/signup-otp");
+      navigate("/set-mpin");
     }
   };
 
   const onSignIn = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (

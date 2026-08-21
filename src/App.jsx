@@ -11,41 +11,50 @@ import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/Landing Page/LandingPage";
 import AppLayout from "./layouts/AppLayout";
 import Profile from "./pages/Profile";
-import { useState } from "react";
+import Transactions from "./pages/Transactions";
+import PlayHistory from "./pages/PlayHistory";
+import HowToPlay from "./pages/HowToPlay";
+import AddMoney from "./pages/AddMoney";
+import WithdrawMoney from "./pages/WithdrawMoney";
+import Settings from "./pages/Settings";
+import Error from "./pages/Error";
+import UnderConstruction from "./pages/UnderConstruction";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+    <div className="app-shell">
+      <BrowserRouter>
+        <Routes>
+          {/* Landing Page */}
+          {/* <Route path="/" element={<LandingPage />} /> */}
 
-        {/* Authentication */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/otp" element={<Otp />} />
-        <Route path="/signup-otp" element={<SignupOTP />} />
-        <Route path="/set-mpin" element={<SetMPIN />} />
-        <Route path="/new-password" element={<NewPassword />} />
+          {/* Authentication */}
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* <Route path="/otp" element={<Otp />} /> */}
+          {/* <Route path="/signup-otp" element={<SignupOTP />} /> */}
+          <Route path="/set-mpin" element={<SetMPIN />} />
+          <Route path="/new-password" element={<NewPassword />} />
 
-        {/* Application Header + Sidebar + Future Footer */}
-        <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/transactions" element={<Transactions />} />
-          <Route path="/play-history" element={<PlayHistory />} />
-          <Route path="/admin-support" element={<AdminSupport />} />
-          <Route path="/result-history" element={<ResultHistory />} />
-          <Route path="/how-to-play" element={<HowToPlay />} />
-          <Route path="/add-money" element={<AddMoney />} />
-          <Route path="/withdraw-money" element={<WithdrawMoney />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/wallet" element={<Wallet />} />
-          <Route path="/notifications" element={<Notifications />} />
-          */}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* Application Header + Sidebar + Future Footer */}
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/play-history" element={<PlayHistory />} />
+            <Route path="/admin-support" element={<UnderConstruction />} />
+            <Route path="/result-history" element={<UnderConstruction />} />
+            <Route path="/how-to-play" element={<HowToPlay />} />
+            <Route path="/add-money" element={<AddMoney />} />
+            <Route path="/wallet" element={<AddMoney />} />
+            <Route path="/withdraw-money" element={<WithdrawMoney />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }

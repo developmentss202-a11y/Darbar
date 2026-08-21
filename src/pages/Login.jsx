@@ -83,7 +83,7 @@ const SignIn = ({ onSignIn }) => {
       mobile,
       password,
     });
-    navigate("/");
+    navigate("/dashboard");
 
     if (onSignIn) {
       onSignIn({
@@ -94,7 +94,7 @@ const SignIn = ({ onSignIn }) => {
   };
 
   const onForgotPassword = () => {
-    navigate("/forgot-password");
+    navigate("/new-password");
   };
 
   const onSignUp = () => {

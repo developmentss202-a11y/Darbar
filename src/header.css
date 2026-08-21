@@ -4,13 +4,13 @@
 
 .app-header {
   width: 100%;
-  height: 72px;
+  height: calc(60px + env(safe-area-inset-top, 0px));
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 28px;
+  padding: env(safe-area-inset-top, 0px) 12px 0;
 
   background: var(--color-text-primary);
 
@@ -18,8 +18,10 @@
 
   box-shadow: var(--shadow-sm);
 
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1000;
+  overflow: visible;
 }
 
 /* ============================================================
@@ -29,6 +31,7 @@
 .header-left {
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
 /* ============================================================
@@ -50,8 +53,8 @@
 }
 
 .header-logo img {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
 
   object-fit: contain;
 
@@ -61,7 +64,7 @@
 .header-brand-name {
   color: var(--color-primary);
 
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
 
   font-weight: var(--font-weight-bold);
 
@@ -76,7 +79,7 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 5px;
 }
 
 /* ============================================================
@@ -84,8 +87,9 @@
    ============================================================ */
 
 .header-action {
-  height: 44px;
-  min-width: 44px;
+  height: 40px;
+  min-width: 40px;
+  width: 40px;
 
   display: flex;
   align-items: center;
@@ -129,9 +133,25 @@
    ============================================================ */
 
 .telegram-action {
-  padding: 0 12px;
+  padding: 0;
 
-  min-width: auto;
+  min-width: 40px;
+  width: 40px;
+}
+
+.telegram-content span {
+  display: none;
+}
+
+.telegram-content img {
+  width: 22px;
+  height: 22px;
+
+  display: block;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
 }
 
 .telegram-content {
@@ -144,25 +164,13 @@
   line-height: 1;
 }
 
-/*
-  IMPORTANT:
-  Font size is scoped only to Telegram.
-  It will NOT affect other elements.
-*/
-
 .telegram-content span {
-  font-size: 13px;
-
-  font-weight: 600;
-
-  line-height: 1;
-
-  white-space: nowrap;
+  display: none;
 }
 
 .telegram-content img {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 
   display: block;
 
@@ -176,22 +184,17 @@
    ============================================================ */
 
 .header-wallet {
-  min-width: 120px;
+  min-width: 40px;
 
-  justify-content: flex-start;
+  width: 40px;
 
-  gap: 8px;
+  padding: 0;
 
-  padding: 0 12px;
+  justify-content: center;
 }
 
 .wallet-info {
-  display: flex;
-  flex-direction: column;
-
-  align-items: flex-start;
-
-  line-height: 1.1;
+  display: none;
 }
 
 .wallet-label {
@@ -236,57 +239,113 @@
   border: 1px solid var(--color-white);
 }
 
+.notification-wrap {
+  position: relative;
+}
+
+.notification-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1200;
+  width: 280px;
+  max-width: calc(100vw - 20px);
+  background: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.notification-menu-title {
+  margin: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid #3a3a3a;
+  color: #f3f3f3;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.notification-menu-list {
+  max-height: 280px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.notification-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item-title {
+  color: #f3f3f3;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.notification-item-text {
+  color: #c8c8c8;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.notification-item-time {
+  color: #e09b1a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
 /* ============================================================
    HAMBURGER BUTTON
    ============================================================ */
 
 .menu-button {
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 36px;
+  min-width: 32px;
+  padding: 0;
 
-  display: none;
-
+  display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   gap: 5px;
 
-  border: 1px solid var(--color-border-light);
-
-  border-radius: var(--radius-lg);
-
-  background: var(--color-white);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 
   cursor: pointer;
-
   transition: var(--transition-fast);
 }
 
 .menu-button:hover,
 .menu-button.active {
-  border-color: var(--color-primary);
-
-  background: var(--color-primary-light);
+  border: none;
+  background: transparent;
 }
 
 .menu-button span {
-  width: 19px;
-  height: 2px;
-
+  width: 20px;
+  height: 2.5px;
   display: block;
-
   border-radius: 2px;
-
-  background: var(--color-text-primary);
-
+  background: #e09b1a;
   transition: var(--transition-fast);
 }
 
 .menu-button:hover span,
 .menu-button.active span {
-  background: var(--color-primary);
+  background: #e09b1a;
 }
 
 /* ============================================================
@@ -298,7 +357,7 @@
 
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.35);
 
   z-index: 1090;
 }
@@ -313,29 +372,31 @@
   top: 0;
   left: 0;
 
-  width: 280px;
-  max-width: 90vw;
+  width: min(82%, 300px);
+  max-width: 100%;
 
-  height: 100vh;
+  height: 100%;
 
   background: var(--color-text-primary);
 
   border-right: 1px solid var(--color-border-light);
 
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.18);
 
   z-index: 1100;
 
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
-  /*
-    DESKTOP:
-    Sidebar remains permanently visible.
-  */
+  overflow: hidden;
 
-  transform: translateX(0);
+  transform: translateX(-100%);
 
   transition: transform 0.25s ease;
+}
+
+.side-menu.open {
+  transform: translateX(0);
 }
 
 /* ============================================================
@@ -351,6 +412,8 @@
   gap: 14px;
 
   padding: 24px;
+
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -424,7 +487,17 @@
    ============================================================ */
 
 .side-menu-nav {
-  padding: 14px 12px 20px;
+  flex: 1;
+  min-height: 0;
+
+  padding: 14px 12px calc(24px + env(safe-area-inset-bottom, 0px));
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 /* ============================================================
@@ -556,40 +629,28 @@
    ============================================================ */
 
 @media (min-width: 801px) {
-  /*
-    Header starts after the permanent sidebar.
-  */
-
   .app-header {
-    margin-left: 280px;
+    margin-left: 0;
 
-    width: calc(100% - 280px);
+    width: 100%;
   }
-
-  /*
-    Hamburger is hidden.
-  */
 
   .menu-button {
-    display: none;
+    display: flex;
   }
-
-  /*
-    Sidebar stays visible.
-  */
 
   .side-menu {
     left: 0;
 
+    transform: translateX(-100%);
+  }
+
+  .side-menu.open {
     transform: translateX(0);
   }
 
-  /*
-    No overlay on desktop.
-  */
-
   .menu-overlay {
-    display: none;
+    display: block;
   }
 }
 
@@ -599,77 +660,43 @@
    ============================================================ */
 
 @media (max-width: 800px) {
-  /*
-    Header returns to full width.
-  */
-
   .app-header {
     width: 100%;
 
     margin-left: 0;
 
-    height: 64px;
+    height: calc(60px + env(safe-area-inset-top, 0px));
 
-    padding: 0 16px;
+    padding: env(safe-area-inset-top, 0px) 12px 0;
   }
-
-  /*
-    Hamburger becomes visible.
-  */
 
   .menu-button {
     display: flex;
-
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 36px;
+    min-width: 32px;
+    background: transparent;
+    border: none;
   }
-
-  /*
-    Sidebar is hidden by default.
-    It slides from the LEFT.
-  */
 
   .side-menu {
     left: 0;
     right: auto;
 
-    width: 320px;
-    max-width: 90vw;
+    width: min(82%, 300px);
+    max-width: 100%;
 
     transform: translateX(-100%);
-
-    border-right: 1px solid var(--color-border-light);
-
-    border-left: none;
-
-    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.12);
   }
-
-  /*
-    Open sidebar.
-  */
 
   .side-menu.open {
     transform: translateX(0);
   }
 
-  .header-logo img {
-    width: 38px;
-    height: 38px;
-  }
-
-  .header-brand-name {
-    font-size: var(--font-size-lg);
-  }
-
-  /*
-    Compact wallet on tablet.
-  */
-
   .header-wallet {
-    min-width: 44px;
+    min-width: 40px;
 
-    width: 44px;
+    width: 40px;
 
     padding: 0;
 
@@ -681,22 +708,18 @@
   }
 
   .header-actions {
-    gap: 6px;
+    gap: 5px;
   }
 
   .header-action {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
 
-  /*
-    Keep Telegram compact.
-  */
-
   .telegram-action {
-    min-width: 42px;
+    min-width: 40px;
 
-    width: 42px;
+    width: 40px;
 
     padding: 0;
   }
@@ -704,83 +727,109 @@
   .telegram-content span {
     display: none;
   }
-
-  .telegram-content img {
-    width: 22px;
-    height: 22px;
-  }
 }
-
-/* ============================================================
-   MOBILE
-   ============================================================ */
 
 @media (max-width: 480px) {
   .app-header {
-    height: 60px;
+    height: calc(56px + env(safe-area-inset-top, 0px));
 
-    padding: 0 12px;
+    padding: env(safe-area-inset-top, 0px) 10px 0;
   }
 
   .header-brand-name {
-    display: none;
-  }
-
-  .header-logo img {
-    width: 40px;
-    height: 40px;
-  }
-
-  .header-action,
-  .menu-button {
-    width: 40px;
-    height: 40px;
-
-    min-width: 40px;
-  }
-
-  .header-actions {
-    gap: 5px;
-  }
-
-  .telegram-action {
-    width: 40px;
-
-    min-width: 40px;
-  }
-
-  .telegram-content img {
-    width: 22px;
-    height: 22px;
+    display: inline;
   }
 
   .side-menu {
-    width: 300px;
+    width: min(86%, 300px);
   }
 
   .side-menu-profile {
     padding: 20px;
+    flex-shrink: 0;
   }
 }
 
-.side-menu::-webkit-scrollbar {
+.side-menu-nav::-webkit-scrollbar {
   width: 3px;
 }
 
-.side-menu::-webkit-scrollbar-track {
+.side-menu-nav::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.side-menu::-webkit-scrollbar-thumb {
+.side-menu-nav::-webkit-scrollbar-thumb {
   background: #cfcfcf;
   border-radius: 10px;
 }
 
-.side-menu::-webkit-scrollbar-thumb:hover {
+.side-menu-nav::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary);
 }
 
-.side-menu {
+.side-menu-nav {
   scrollbar-width: thin;
   scrollbar-color: #cfcfcf transparent;
+}
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.confirm-card {
+  width: 100%;
+  max-width: 300px;
+  padding: 22px 18px 16px;
+  background: var(--app-surface, #242424);
+  border: 1px solid var(--app-border, rgba(255, 255, 255, 0.1));
+  border-radius: 14px;
+  text-align: center;
+}
+
+.confirm-title {
+  margin: 0 0 8px;
+  color: var(--app-text, #f3f3f3);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.confirm-text {
+  margin: 0;
+  color: var(--app-text-muted, #a0a0a0);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.confirm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.confirm-btn {
+  height: 42px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm-btn-cancel {
+  border: 1px solid var(--app-border, rgba(255, 255, 255, 0.1));
+  background: transparent;
+  color: var(--app-text, #f3f3f3);
+}
+
+.confirm-btn-logout {
+  border: none;
+  background: #e05a5a;
+  color: #ffffff;
 }
