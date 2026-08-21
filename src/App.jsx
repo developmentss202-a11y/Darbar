@@ -28,7 +28,7 @@ export default function App() {
           {/* Landing Page */}
           {/* <Route path="/" element={<LandingPage />} /> */}
 
-          {/* Authentication */}
+          {/* Authentication*/}
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
