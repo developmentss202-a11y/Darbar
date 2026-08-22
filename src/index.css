@@ -3576,3 +3576,77 @@ html[data-theme="light"] .result-card-game {
 html[data-theme="light"] .result-table-row {
   border-color: #e1e1e1;
 }
+
+/* ============================================================
+   PROFILE PAGE — LIGHT THEME OVERRIDES
+   ============================================================ */
+
+html[data-theme="light"] .profile-container {
+  background: #ffffff;
+  color: #222222;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .profile-header {
+  border-bottom-color: #e1e1e1;
+}
+
+html[data-theme="light"] .profile-name {
+  color: #222222;
+}
+
+html[data-theme="light"] .profile-phone,
+html[data-theme="light"] .profile-phone svg {
+  color: #777777;
+}
+
+html[data-theme="light"] .profile-verified-btn {
+  color: var(--color-primary-dark);
+  border-color: rgba(224, 155, 26, 0.4);
+  background: #fffaf0;
+}
+
+html[data-theme="light"] .bank-section-title {
+  color: #222222;
+}
+
+html[data-theme="light"] .bank-section-title svg {
+  color: var(--color-primary);
+}
+
+html[data-theme="light"] .bank-details-card {
+  background: #ffffff;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .bank-detail-row {
+  border-bottom-color: #e1e1e1;
+}
+
+html[data-theme="light"] .bank-detail-label {
+  color: #777777;
+}
+
+html[data-theme="light"] .bank-detail-value {
+  color: #222222;
+}
+
+html[data-theme="light"] .profile-action-btn.primary {
+  background: var(--color-primary);
+  color: #1a1a1a;
+}
+
+html[data-theme="light"] .profile-action-btn.secondary {
+  background: #eeeeee;
+  color: #222222;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .profile-action-btn.secondary svg {
+  color: #222222;
+}
+
+html[data-theme="light"] .profile-action-btn.secondary:hover {
+  background: #e5e5e5;
+  color: #111111;
+}
