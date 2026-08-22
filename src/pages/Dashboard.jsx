@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import heroImage from "../assets/hero-image.png";
+import whatsappIcon from "../assets/whatsapp.png";
 
 const games = [
   {
@@ -144,21 +145,6 @@ function TelegramIcon() {
   );
 }
 
-function WhatsAppIcon() {
-  return (
-    <svg
-      className="dashboard-contact-icon"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M20.5 3.5A11 11 0 0 0 2.4 17.7L1.5 22.5l4.9-.9A11 11 0 1 0 20.5 3.5zm-8.5 17a9.1 9.1 0 0 1-4.64-1.27l-.33-.2-2.91.54.55-2.84-.22-.35A9.13 9.13 0 1 1 12 20.5zm5-6.83c-.27-.14-1.6-.79-1.85-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.6-1.5-1.86-.16-.27-.02-.41.12-.54.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47h-.52c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.35.98 2.66 1.12 2.84.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.65.21 1.25.18 1.72.11.52-.08 1.6-.65 1.83-1.28.22-.63.22-1.17.16-1.28-.07-.11-.25-.18-.52-.32z"
-      />
-    </svg>
-  );
-}
-
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -196,7 +182,7 @@ const Dashboard = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <WhatsAppIcon />
+          <img src={whatsappIcon} alt="Whatsapp Icon" />
           <span>WhatsApp</span>
         </a>
       </div>

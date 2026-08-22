@@ -2082,6 +2082,11 @@ input {
   background: #25d366;
 }
 
+.dashboard-contact-btn--whatsapp img {
+  width: 20px;
+  height: 20px;
+}
+
 .dashboard-contact-btn--whatsapp:hover,
 .dashboard-contact-btn--whatsapp:focus-visible {
   background: #1ebe5d;

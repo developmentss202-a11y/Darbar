@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import singleCoin from "../assets/singlegold-coin.png";
 import bell from "../assets/bell.png";
+import closeIcon from "../assets/remove.png";
 
 import "../header.css";
 
@@ -158,7 +159,19 @@ function Header({
 
           {showNotifications && (
             <div className="notification-menu" role="menu">
-              <p className="notification-menu-title">Notifications</p>
+              <div className="notification-menu-header">
+                <p className="notification-menu-title">Notifications</p>
+                <button
+                  type="button"
+                  className="notification-menu-close"
+                  onClick={() => setShowNotifications(false)}
+                  aria-label="Close notifications"
+                >
+                  <span className="notification-menu-close-icon">
+                    <img src={closeIcon} alt="Close" />
+                  </span>
+                </button>
+              </div>
               <div className="notification-menu-list">
                 {demoNotifications.map((item) => (
                   <div
