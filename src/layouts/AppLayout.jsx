@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Header from "../components/Header";
@@ -8,33 +8,31 @@ import LandingFooter from "../pages/Landing Page/LandingFooter";
 
 function AppLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const shell = document.querySelector(".app-shell");
-
-    if (!shell) {
-      return;
-    }
-
-    shell.style.overflowY = isMenuOpen ? "hidden" : "auto";
-
-    return () => {
-      shell.style.overflowY = "auto";
-    };
-  }, [isMenuOpen]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   return (
-    <div className="app-layout">
+    <div
+      className={`app-layout${showNotifications ? " notifications-open" : ""}${
+        isMenuOpen ? " menu-open" : ""
+      }`}
+    >
       {/* Header */}
-      <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <Header
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        showNotifications={showNotifications}
+        setShowNotifications={setShowNotifications}
+      />
 
       {/* Sidebar */}
       <Sidebar isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
 
       {/* Page Content */}
-      <main className={`app-content ${isMenuOpen ? "sidebar-open" : ""}`}>
-        <Outlet />
-      </main>
+      <div className="app-scroll">
+        <main className={`app-content ${isMenuOpen ? "sidebar-open" : ""}`}>
+          <Outlet />
+        </main>
+      </div>
 
       {/* <Footer /> */}
       <LandingFooter />

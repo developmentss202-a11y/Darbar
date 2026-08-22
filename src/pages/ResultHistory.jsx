@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
+import Pagination, { PAGE_SIZE } from "../components/Pagination";
 
 /*
  * ============================================================
@@ -250,6 +251,13 @@ const resultHistory = [
  */
 
 function ResultHistory() {
+  const [page, setPage] = useState(1);
+  const pageCount = Math.max(1, Math.ceil(resultHistory.length / PAGE_SIZE));
+  const pagedHistory = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return resultHistory.slice(start, start + PAGE_SIZE);
+  }, [page]);
+
   return (
     <div className="app-page">
       {/* ======================================================
@@ -270,7 +278,7 @@ function ResultHistory() {
       ====================================================== */}
 
       <div className="result-history-list">
-        {resultHistory.map((history) => {
+        {pagedHistory.map((history) => {
           /*
            * Find the market/game from the games array.
            *
@@ -338,6 +346,7 @@ function ResultHistory() {
           );
         })}
       </div>
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} className="resultPagination"/>
     </div>
   );
 }

@@ -147,16 +147,15 @@ body {
   background: var(--app-bg);
   color: var(--app-text);
 
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 
-  -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 
   transform: translateZ(0);
 
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  position: relative;
 }
 
 @media (max-width: 430px) {
@@ -2602,14 +2601,56 @@ input {
    ============================================================ */
 
 .app-layout {
+  --app-header-height: calc(60px + env(safe-area-inset-top, 0px));
+  --app-footer-height: 56px;
   width: 100%;
-  min-height: 100%;
-  min-height: 100dvh;
-  overflow: visible;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--app-bg);
   color: var(--app-text);
+  position: relative;
+}
+
+.app-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.app-layout.notifications-open .app-scroll,
+.app-layout.menu-open .app-scroll {
+  overflow: hidden;
+}
+
+.app-layout .footer {
+  width: 100%;
+  min-height: var(--app-footer-height);
+  padding: 16px 12px;
+  box-sizing: border-box;
+  background: #0b0b0b;
+  color: #c8c8c8;
+  text-align: center;
+  border-top: 1px solid #3a3a3a;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1100;
+}
+
+.app-layout .footer p {
+  margin: 0;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .app-layout {
+    --app-header-height: calc(56px + env(safe-area-inset-top, 0px));
+  }
 }
 
 .app-content {
@@ -2929,6 +2970,61 @@ html body .primary-button:hover {
 .table-datetime span:last-child {
   color: var(--app-text-muted);
   font-size: 11px;
+}
+
+.app-table-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.app-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.app-pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-pagination-btn,
+.app-pagination-page {
+  min-width: 36px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  background: #242424;
+  color: #f3f3f3;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-pagination-btn:disabled,
+.app-pagination-page:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.app-pagination-page.active {
+  background: #e09b1a;
+  border-color: #e09b1a;
+  color: #1a1a1a;
+}
+
+.app-pagination-ellipsis {
+  min-width: 20px;
+  color: #a0a0a0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
 .money-page {
@@ -3649,4 +3745,8 @@ html[data-theme="light"] .profile-action-btn.secondary svg {
 html[data-theme="light"] .profile-action-btn.secondary:hover {
   background: #e5e5e5;
   color: #111111;
+}
+
+.resultPagination {
+  margin-top: 15px;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import singleCoin from "../assets/singlegold-coin.png";
 import bell from "../assets/bell.png";
@@ -52,9 +52,13 @@ const demoNotifications = [
   },
 ];
 
-function Header({ isMenuOpen, setIsMenuOpen }) {
+function Header({
+  isMenuOpen,
+  setIsMenuOpen,
+  showNotifications,
+  setShowNotifications,
+}) {
   const navigate = useNavigate();
-  const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef(null);
 
   const handleNavigation = (path) => {
