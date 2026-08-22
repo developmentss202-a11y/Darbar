@@ -3348,8 +3348,231 @@ html[data-theme="light"] .confirm-btn-cancel {
   color: #777777;
 }
 
-.header-gold-coin img {
+.header-gold-coin img,
+.header-bell img {
   margin-top: 4px;
   width: 22px;
   height: 22px;
+}
+
+/* ============================================================
+   ADMIN SUPPORT PAGE
+   ============================================================ */
+
+.support-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.support-form .form-group {
+  margin-bottom: 12px;
+}
+
+.support-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg);
+  outline: none;
+  resize: vertical;
+  background: var(--app-surface-2);
+  color: var(--app-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  transition: var(--transition-fast);
+}
+
+.support-textarea::placeholder {
+  color: #8a8a8a;
+}
+
+.support-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(224, 155, 26, 0.18);
+}
+
+.support-form .primary-button {
+  margin-top: 4px;
+}
+
+/* ============================================================
+   RESULT HISTORY
+   ============================================================ */
+
+.result-history-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================================
+   RESULT CARD
+   ============================================================ */
+
+.result-history-card {
+  width: 100%;
+  overflow: hidden;
+
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.result-card-header {
+  min-height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 9px 12px;
+
+  background: var(--app-surface-2);
+
+  border-bottom: 1px solid var(--app-border);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.result-card-date {
+  color: var(--app-text);
+}
+
+.result-card-game {
+  color: var(--color-primary);
+
+  text-align: right;
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   TABLE HEADER
+   ============================================================ */
+
+.result-table-header,
+.result-table-row {
+  display: grid;
+
+  grid-template-columns:
+    1.2fr
+    0.9fr
+    1.1fr
+    0.8fr
+    0.8fr;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+/* ============================================================
+   TABLE HEADER
+   ============================================================ */
+
+.result-table-header {
+  min-height: 34px;
+
+  padding: 0 8px;
+
+  background: var(--app-surface-2);
+
+  border-bottom: 1px solid var(--app-border);
+
+  color: var(--app-text);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   TABLE ROW
+   ============================================================ */
+
+.result-table-row {
+  min-height: 40px;
+
+  padding: 0 8px;
+
+  color: var(--app-text);
+
+  font-size: var(--font-size-sm);
+
+  border-bottom: 1px solid var(--app-border);
+}
+
+.result-table-row:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.result-status {
+  font-weight: var(--font-weight-medium);
+}
+
+.result-status.pending {
+  color: var(--app-text-muted);
+}
+
+.result-status.winner {
+  color: #2e9b5b;
+}
+
+.result-status.loser {
+  color: #d9534f;
+}
+
+/* ============================================================
+   WON
+   ============================================================ */
+
+.result-won {
+  color: var(--color-primary);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .result-history-card {
+  background: #ffffff;
+  border-color: #d6d6d6;
+}
+
+html[data-theme="light"] .result-card-header,
+html[data-theme="light"] .result-table-header {
+  background: #f5f5f5;
+}
+
+html[data-theme="light"] .result-card-date,
+html[data-theme="light"] .result-table-header,
+html[data-theme="light"] .result-table-row {
+  color: #222222;
+}
+
+html[data-theme="light"] .result-card-game {
+  color: var(--color-primary);
+}
+
+html[data-theme="light"] .result-table-row {
+  border-color: #e1e1e1;
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import singleCoin from "../assets/singlegold-coin.png";
+import bell from "../assets/bell.png";
 
 import "../header.css";
 
@@ -145,7 +146,9 @@ function Header({ isMenuOpen, setIsMenuOpen }) {
             title="Notifications"
             aria-expanded={showNotifications}
           >
-            <span className="header-action-icon">♢</span>
+            <span className="header-action-icon header-bell">
+              <img src={bell} alt="Notification Bell" />
+            </span>
             <span className="notification-dot"></span>
           </button>
 

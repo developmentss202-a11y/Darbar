@@ -19,6 +19,8 @@ import WithdrawMoney from "./pages/WithdrawMoney";
 import Settings from "./pages/Settings";
 import Error from "./pages/Error";
 import UnderConstruction from "./pages/UnderConstruction";
+import AdminSupport from "./pages/AdminSupport";
+import ResultHistory from "./pages/ResultHistory";
 
 export default function App() {
   return (
@@ -43,8 +45,8 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/play-history" element={<PlayHistory />} />
-            <Route path="/admin-support" element={<UnderConstruction />} />
-            <Route path="/result-history" element={<UnderConstruction />} />
+            <Route path="/admin-support" element={<AdminSupport />} />
+            <Route path="/result-history" element={<ResultHistory />} />
             <Route path="/how-to-play" element={<HowToPlay />} />
             <Route path="/add-money" element={<AddMoney />} />
             <Route path="/wallet" element={<AddMoney />} />
