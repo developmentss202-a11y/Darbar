@@ -21,6 +21,9 @@ import Error from "./pages/Error";
 import UnderConstruction from "./pages/UnderConstruction";
 import AdminSupport from "./pages/AdminSupport";
 import ResultHistory from "./pages/ResultHistory";
+import GameOptions from "./pages/GameOptions";
+import GameJodi from "./pages/GameJodi";
+import GameHarup from "./pages/GameHarup";
 
 export default function App() {
   return (
@@ -52,6 +55,11 @@ export default function App() {
             <Route path="/wallet" element={<AddMoney />} />
             <Route path="/withdraw-money" element={<WithdrawMoney />} />
             <Route path="/settings" element={<Settings />} />
+
+            {/* Game Routes */}
+            <Route path="/game/:id" element={<GameOptions />} />
+            <Route path="/game/:id/jodi" element={<GameJodi />} />
+            <Route path="/game/:id/harup" element={<GameHarup />} />
           </Route>
 
           <Route path="*" element={<Error />} />

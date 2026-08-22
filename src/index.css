@@ -3750,3 +3750,365 @@ html[data-theme="light"] .profile-action-btn.secondary:hover {
 .resultPagination {
   margin-top: 15px;
 }
+
+/* ============================================================
+   PAGE BACK BUTTON (inline with page-heading)
+   ============================================================ */
+
+.page-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-md);
+  background: var(--app-surface-2);
+  color: var(--app-text);
+  font-size: 18px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  vertical-align: middle;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.page-back-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-black);
+  border-color: var(--color-primary);
+}
+
+/* ============================================================
+   GAME OPTIONS PAGE — Select Jodi / Harup
+   ============================================================ */
+
+.game-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.game-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 36px 16px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.game-type-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border-color: var(--color-primary);
+}
+
+.game-type-icon {
+  font-size: 56px;
+  line-height: 1;
+}
+
+.game-type-name {
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+}
+
+.game-type-name--jodi {
+  color: #42a5f5;
+}
+
+.game-type-name--harup {
+  color: #ffa726;
+}
+
+/* ============================================================
+   JODI PAGE — 10×10 grid of numbers
+   ============================================================ */
+
+.jodi-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  border: 1px solid #3a3a3a;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.jodi-cell {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #3a3a3a;
+}
+
+.jodi-num {
+  background: var(--color-primary);
+  color: var(--color-black);
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.jodi-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 11px;
+  font-family: var(--font-family);
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+
+.jodi-input::placeholder {
+  color: #555;
+}
+
+.jodi-input::-webkit-outer-spin-button,
+.jodi-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.jodi-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ============================================================
+   HARUP PAGE — Form + Table
+   ============================================================ */
+
+.harup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.harup-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.harup-label {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--app-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.harup-radios {
+  display: flex;
+  gap: 18px;
+}
+
+.harup-radio {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--app-text);
+}
+
+.harup-radio input[type="radio"] {
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.harup-input {
+  flex: 1;
+  max-width: 160px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg);
+  background: var(--app-surface-2);
+  color: var(--app-text);
+  font-size: 14px;
+  font-family: var(--font-family);
+  text-align: center;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.harup-input:focus {
+  border-color: var(--color-primary);
+}
+
+.harup-input::-webkit-outer-spin-button,
+.harup-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.harup-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.harup-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 107, 107, 0.18);
+  color: #ff6b6b;
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.harup-remove-btn:hover {
+  background: rgba(255, 107, 107, 0.35);
+}
+
+/* ============================================================
+   GAME POPUP (Success Modal) — shared by Jodi & Harup
+   ============================================================ */
+
+.game-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.game-popup {
+  width: 85%;
+  max-width: 320px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.game-popup-header {
+  background: var(--color-primary);
+  color: var(--color-black);
+  text-align: center;
+  padding: 14px;
+  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.game-popup-body {
+  background: var(--app-surface);
+  padding: 28px 20px 22px;
+  text-align: center;
+}
+
+.game-popup-text {
+  color: var(--app-success) !important;
+  font-size: 17px;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 22px;
+}
+
+.game-popup-body .primary-button {
+  max-width: 140px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   JODI GRID — LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .jodi-grid,
+html[data-theme="light"] .jodi-cell {
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .jodi-input {
+  background: #ffffff;
+  color: #222222;
+}
+
+html[data-theme="light"] .jodi-input::placeholder {
+  color: #999999;
+}
+
+/* ============================================================
+   HARUP FORM — LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .harup-label {
+  color: #666666;
+}
+
+html[data-theme="light"] .harup-radio {
+  color: #222222;
+}
+
+html[data-theme="light"] .harup-input {
+  background: #ffffff;
+  color: #222222;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .harup-input::placeholder {
+  color: #999999;
+}
+
+/* ============================================================
+   ADMIN SUPPORT TEXTAREA — LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .support-textarea {
+  background: #ffffff;
+  color: #222222;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .support-textarea::placeholder {
+  color: #999999;
+}
+
+/* ============================================================
+   GAME TYPE CARDS (Jodi / Harup selector) — LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .game-type-card {
+  background: #ffffff;
+  border-color: #d8d8d8;
+}
+
+html[data-theme="light"] .game-type-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   APP FOOTER — LIGHT THEME
+   ============================================================ */
+
+html[data-theme="light"] .app-layout .footer {
+  background: #ffffff;
+  border-top-color: #d8d8d8;
+}
+
+html[data-theme="light"] .app-layout .footer p {
+  color: black;
+}
