@@ -1,12 +1,41 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "../assets/hero-image.png";
 import whatsappIcon from "../assets/whatsapp.png";
+import { chatLink, loadAppSettings } from "../data/wallet";
 
+const SLIDERS_API = import.meta.env.DEV
+  ? "/api/app-sliders"
+  : `${import.meta.env.VITE_API_ROUTE}/api/app-sliders`;
+
+function getSliderImages(data) {
+  const list = data.data || data.sliders || [];
+  if (!Array.isArray(list)) {
+    return [];
+  }
+
+  return list
+    .map((item, index) => {
+      const imageUrl =
+        typeof item === "string"
+          ? item
+          : item.image || item.imageUrl || item.url || "";
+      return imageUrl ? { id: index + 1, imageUrl } : null;
+    })
+    .filter(Boolean);
+}
+
+/*
+  Later: GET /api/markets
+  Replace this list with the API response.
+  result = "330 63 355" from admin when closed, "*** ** ***" while running
+*/
+const OPEN_RESULT = "*** ** ***";
 const games = [
   {
     id: "delhi-star-dl",
     name: "DELHI STAR-DL",
-    result: "**",
+    result: "330 63 355",
     status: "Closed",
     closeTime: "12:00 PM",
     resultTime: "12:30 PM",
@@ -14,7 +43,7 @@ const games = [
   {
     id: "rawased",
     name: "RAWASED",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "01:00 PM",
     resultTime: "01:30 PM",
@@ -22,7 +51,7 @@ const games = [
   {
     id: "ilag",
     name: "ILAG",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "02:00 PM",
     resultTime: "02:20 PM",
@@ -30,7 +59,7 @@ const games = [
   {
     id: "delhi-bazaar",
     name: "DELHI BAZAAR",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "03:00 PM",
     resultTime: "03:10 PM",
@@ -38,7 +67,7 @@ const games = [
   {
     id: "shree-ganesh",
     name: "SHREE GANESH",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "04:30 PM",
     resultTime: "04:40 PM",
@@ -46,7 +75,7 @@ const games = [
   {
     id: "faridabad",
     name: "FARIDABAD",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "05:40 PM",
     resultTime: "06:10 PM",
@@ -54,7 +83,7 @@ const games = [
   {
     id: "ghaziabad",
     name: "GAZIABAD",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "09:40 PM",
     resultTime: "10:00 PM",
@@ -62,7 +91,7 @@ const games = [
   {
     id: "gali",
     name: "GALI",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "11:40 PM",
     resultTime: "12:00 AM",
@@ -70,7 +99,7 @@ const games = [
   {
     id: "ncr",
     name: "NCR",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "01:00 AM",
     resultTime: "01:30 AM",
@@ -78,7 +107,7 @@ const games = [
   {
     id: "disawar",
     name: "DISAWAR",
-    result: "**",
+    result: OPEN_RESULT,
     status: "Running",
     closeTime: "05:00 AM",
     resultTime: "05:10 AM",
@@ -147,29 +176,77 @@ function TelegramIcon() {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [bannerIndex, setBannerIndex] = useState(0);
+  const [bannerImages, setBannerImages] = useState([{ id: 1, imageUrl: heroImage }]);
+  const [telegramHref, setTelegramHref] = useState("https://t.me/");
+  const [whatsappHref, setWhatsappHref] = useState("https://wa.me/");
+
+  useEffect(() => {
+    fetch(SLIDERS_API)
+      .then((response) => response.json().catch(() => ({})))
+      .then((data) => {
+        const images = getSliderImages(data);
+        if (images.length) {
+          setBannerImages(images);
+          setBannerIndex(0);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (bannerImages.length < 2) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setBannerIndex((current) => (current + 1) % bannerImages.length);
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [bannerImages.length]);
+
+  useEffect(() => {
+    loadAppSettings().then((settings) => {
+      setTelegramHref(chatLink("telegram", settings.telegram_no || settings.contact_no));
+      setWhatsappHref(
+        chatLink("whatsapp", settings.whatsapp || settings.contact_no)
+      );
+    });
+  }, []);
 
   return (
     <div className="dashboard-page">
-      <section className="dashboard-banner">
-        <img
-          className="dashboard-banner-image"
-          src={heroImage}
-          alt="Casino cards and roulette banner"
-        />
-
-        <div className="dashboard-banner-overlay">
-          <span className="dashboard-banner-kicker">GVSC Live</span>
-          <h1 className="dashboard-banner-title">Play. Win. Repeat.</h1>
-          <p className="dashboard-banner-text">
-            Cards, casino-style action, and daily markets — all in one place.
-          </p>
+      <section className="dashboard-banner" aria-label="Promotional banners">
+        {bannerImages.map((banner, index) => (
+          <img
+            key={banner.id}
+            className={`dashboard-banner-image ${
+              index === bannerIndex ? "is-active" : ""
+            }`}
+            src={banner.imageUrl}
+            alt=""
+          />
+        ))}
+        <div className="dashboard-banner-dots">
+          {bannerImages.map((banner, index) => (
+            <button
+              key={banner.id}
+              type="button"
+              className={`dashboard-banner-dot ${
+                index === bannerIndex ? "is-active" : ""
+              }`}
+              onClick={() => setBannerIndex(index)}
+              aria-label={`Banner ${index + 1}`}
+            />
+          ))}
         </div>
       </section>
 
       <div className="dashboard-contact-strip">
         <a
           className="dashboard-contact-btn dashboard-contact-btn--telegram"
-          href="https://t.me/"
+          href={telegramHref}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -178,7 +255,7 @@ const Dashboard = () => {
         </a>
         <a
           className="dashboard-contact-btn dashboard-contact-btn--whatsapp"
-          href="https://wa.me/"
+          href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -189,7 +266,11 @@ const Dashboard = () => {
 
       <section className="dashboard-games" aria-label="Game markets">
         {games.map((game) => {
+          const isClosed = game.status.toLowerCase() === "closed";
           const statusClass = game.status.toLowerCase();
+          const resultText = (isClosed ? game.result || OPEN_RESULT : OPEN_RESULT)
+            .replace(/[-_]/g, " ");
+          const resultParts = resultText.split(/\s+/).filter(Boolean);
 
           return (
             <article
@@ -205,13 +286,24 @@ const Dashboard = () => {
                 </span>
               </div>
 
+              <p className="game-card-result">
+                {resultParts.map((part, index) => (
+                  <span
+                    key={`${game.id}-result-${index}`}
+                    className={`game-card-result-part game-card-result-part--${index}`}
+                  >
+                    {part}
+                  </span>
+                ))}
+              </p>
+
               <div className="game-card-timer">
                 <span className="game-time-pill">
                   <span className="game-time-icon" aria-hidden="true">
                     <CloseTimeIcon />
                   </span>
                   <span className="game-time-text">
-                    Close Time
+                    Close
                     <strong>{game.closeTime}</strong>
                   </span>
                 </span>
@@ -220,7 +312,7 @@ const Dashboard = () => {
                     <ResultTimeIcon />
                   </span>
                   <span className="game-time-text">
-                    Result Time
+                    Result
                     <strong>{game.resultTime}</strong>
                   </span>
                 </span>
@@ -229,7 +321,12 @@ const Dashboard = () => {
               <button
                 type="button"
                 className="game-play-button"
-                onClick={() => navigate(`/game/${game.id}`)}
+                disabled={isClosed}
+                onClick={() => {
+                  if (!isClosed) {
+                    navigate(`/game/${game.id}`);
+                  }
+                }}
               >
                 Play Now
               </button>

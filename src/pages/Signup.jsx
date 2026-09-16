@@ -3,20 +3,42 @@ import { useNavigate } from "react-router-dom";
 import gvscLogo from "../assets/Logo3.png";
 import "../index.css";
 
-const SignUp = ({ onContinue }) => {
+const REGISTER_API = import.meta.env.DEV
+  ? "/api/register"
+  : `${import.meta.env.VITE_API_ROUTE}/api/register`;
+
+function getRegisterError(data) {
+  const message = String(data?.message || "");
+
+  if (message.toLowerCase().includes("already")) {
+    return {
+      field: "mobile",
+      text: "This user already exists. Please sign in.",
+    };
+  }
+
+  return {
+    field: "password",
+    text: message || "Registration failed. Please try again.",
+  };
+}
+
+
+const SignUp = () => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
     password: "",
-    confirmpassword: "",
   });
 
   const [errors, setErrors] = useState({
     name: "",
     mobile: "",
     password: "",
-    confirmpassword: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -48,14 +70,13 @@ const SignUp = ({ onContinue }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {
       name: "",
       mobile: "",
       password: "",
-      confirmpassword: "",
     };
 
     let hasError = false;
@@ -78,44 +99,54 @@ const SignUp = ({ onContinue }) => {
       hasError = true;
     }
 
-    if (!formData.confirmpassword) {
-      newErrors.confirmpassword = "Please confirm your password.";
-      hasError = true;
-    } else if (formData.password !== formData.confirmpassword) {
-      newErrors.confirmpassword = "Passwords do not match.";
-      hasError = true;
-    }
-
     setErrors(newErrors);
 
-    if (hasError) {
+    if (hasError || isSubmitting) {
       return;
     }
 
-    /*
-      Phase 1:
-      Store signup information temporarily.
+    setIsSubmitting(true);
 
-      Later this will be sent to your backend.
-    */
+    try {
+      const response = await fetch(REGISTER_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          mobile: Number(formData.mobile),
+          password: formData.password,
+        }),
+      });
 
-    sessionStorage.setItem("signupData", JSON.stringify(formData));
 
-    /*
-      Go to OTP.
+      const data = await response.json().catch(() => ({}));
 
-      IMPORTANT:
-      We are NOT going to new-password here.
+      if (!response.ok || data.status === 0) {
+        const apiError = getRegisterError(data);
+        setErrors((prev) => ({
+          ...prev,
+          [apiError.field]: apiError.text,
+        }));
+        return;
+      }
 
-      Signup flow:
-      SignUp → OTP → SetMPIN → Home
-    */
-
-    if (onContinue) {
-      onContinue(formData);
-    } else {
-      navigate("/set-mpin");
+      setShowSuccessPopup(true);
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        password: "Registration failed. Please try again.",
+      }));
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handlePopupOk = () => {
+    setShowSuccessPopup(false);
+    navigate("/");
   };
 
   const onSignIn = () => {
@@ -206,7 +237,7 @@ const SignUp = ({ onContinue }) => {
             >
               <input
                 id="signup-password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 className="form-input"
                 placeholder="Enter password"
@@ -214,13 +245,55 @@ const SignUp = ({ onContinue }) => {
                 onChange={handleChange}
                 autoComplete="new-password"
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((open) => !open)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <svg className="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                ) : (
+                  <svg className="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M14.12 14.12a3 3 0 1 1-4.24-4.24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                )}
+              </button>
             </div>
 
             <div className="field-error">{errors.password || "\u00A0"}</div>
           </div>
 
           {/* Confirm Password */}
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="signup-confirmpassword" className="form-label">
               Confirm Password
             </label>
@@ -245,11 +318,15 @@ const SignUp = ({ onContinue }) => {
             <div className="field-error">
               {errors.confirmpassword || "\u00A0"}
             </div>
-          </div>
+          </div> */}
 
           {/* Continue */}
-          <button type="submit" className="primary-button">
-            Continue
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Please wait..." : "Continue"}
           </button>
         </form>
 
@@ -262,6 +339,24 @@ const SignUp = ({ onContinue }) => {
           </button>
         </div>
       </div>
+
+      {showSuccessPopup && (
+        <div className="game-popup-overlay">
+          <div className="game-popup">
+            <div className="game-popup-header">SUCCESS</div>
+            <div className="game-popup-body">
+              <p className="game-popup-text">Registration Successful</p>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={handlePopupOk}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

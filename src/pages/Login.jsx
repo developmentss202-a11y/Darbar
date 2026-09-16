@@ -3,11 +3,16 @@ import { useNavigate } from "react-router-dom";
 import gvscLogo from "../assets/Logo3.png";
 import "../index.css";
 
-const SignIn = ({ onSignIn }) => {
+const LOGIN_API = import.meta.env.DEV
+  ? "/api/login"
+  : `${import.meta.env.VITE_API_ROUTE}/api/login`;
+
+const SignIn = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [error, setError] = useState({
     field: "",
@@ -35,7 +40,7 @@ const SignIn = ({ onSignIn }) => {
     clearError();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError({
@@ -43,7 +48,6 @@ const SignIn = ({ onSignIn }) => {
       message: "",
     });
 
-    // Mobile validation
     if (!mobile) {
       setError({
         field: "mobile",
@@ -60,7 +64,6 @@ const SignIn = ({ onSignIn }) => {
       return;
     }
 
-    // Password validation
     if (!password) {
       setError({
         field: "password",
@@ -69,27 +72,44 @@ const SignIn = ({ onSignIn }) => {
       return;
     }
 
-    // Hardcoded Phase 1 credentials
-    if (mobile !== "9876543210" || password !== "123456") {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(LOGIN_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          mobile: Number(mobile),
+          password,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || data.status === 0) {
+        setError({
+          field: "form",
+          message: "Invalid Phone Number or Password",
+        });
+        return;
+      }
+
+      const token = data.token || data.data?.token;
+      if (token) {
+        localStorage.setItem("gvsc-token", token);
+      }
+
+      navigate("/dashboard");
+    } catch (err) {
       setError({
         field: "form",
-        message: "Invalid Email or Password.",
+        message: "Login failed. Please try again.",
       });
-      return;
-    }
-
-    // Login successful
-    console.log("Sign In data:", {
-      mobile,
-      password,
-    });
-    navigate("/dashboard");
-
-    if (onSignIn) {
-      onSignIn({
-        mobile,
-        password,
-      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -191,7 +211,41 @@ const SignIn = ({ onSignIn }) => {
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? "◉" : "○"}
+                {showPassword ? (
+                  <svg className="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                ) : (
+                  <svg className="password-eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M14.12 14.12a3 3 0 1 1-4.24-4.24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                )}
               </button>
             </div>
 
@@ -211,19 +265,14 @@ const SignIn = ({ onSignIn }) => {
           )}
 
           {/* Sign In */}
-          <button type="submit" className="primary-button">
-            Sign In
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Signing in..." : "Sign In"}
           </button>
         </form>
-
-        {/* Demo Credentials */}
-        <div className="demo-box">
-          <strong>Demo Credentials</strong>
-
-          <span>Mobile: 9876543210</span>
-
-          <span>Password: 123456</span>
-        </div>
 
         {/* Sign Up */}
         <div className="auth-footer">

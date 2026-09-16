@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -9,6 +9,10 @@ import LandingFooter from "../pages/Landing Page/LandingFooter";
 function AppLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  if (!localStorage.getItem("gvsc-token")) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div

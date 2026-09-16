@@ -21,6 +21,7 @@ import Error from "./pages/Error";
 import UnderConstruction from "./pages/UnderConstruction";
 import AdminSupport from "./pages/AdminSupport";
 import ResultHistory from "./pages/ResultHistory";
+import ReferAndEarn from "./pages/ReferAndEarn";
 import GameOptions from "./pages/GameOptions";
 import GameJodi from "./pages/GameJodi";
 import GameHarup from "./pages/GameHarup";
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="/wallet" element={<AddMoney />} />
             <Route path="/withdraw-money" element={<WithdrawMoney />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/refer-and-earn" element={<ReferAndEarn />} />
 
             {/* Game Routes */}
             <Route path="/game/:id" element={<GameOptions />} />

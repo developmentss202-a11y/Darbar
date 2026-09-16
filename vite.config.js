@@ -62,4 +62,22 @@ export default defineConfig({
   css: {
     devSourcemap: true,
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://admin.gvsc.myaibusiness.online",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
+  preview: {
+    proxy: {
+      "/api": {
+        target: "https://admin.gvsc.myaibusiness.online",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
 });

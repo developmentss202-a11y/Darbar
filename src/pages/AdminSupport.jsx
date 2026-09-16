@@ -1,12 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AdminSupport = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,12 +22,38 @@ const AdminSupport = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   console.log("Support Request:", formData);
+
+  //   // API call will go here later
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Support Request:", formData);
+    try {
+      const response = await fetch("http://localhost:3000/api/support", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // API call will go here later
+      const data = await response.json();
+      console.log(data);
+
+      setShowSuccessPopup(true);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handlePopupOk = () => {
+    setShowSuccessPopup(false);
+    navigate("/dashboard");
   };
 
   return (
@@ -112,6 +143,24 @@ const AdminSupport = () => {
           Submit Request
         </button>
       </form>
+
+      {showSuccessPopup && (
+        <div className="game-popup-overlay">
+          <div className="game-popup">
+            <div className="game-popup-header">SUCCESS</div>
+            <div className="game-popup-body">
+              <p className="game-popup-text">Submitted Successfully</p>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={handlePopupOk}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

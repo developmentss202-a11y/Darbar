@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { shareText } from "../utils/share";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   };
 
   const handleLogoutConfirm = () => {
+    localStorage.removeItem("gvsc-token");
     setShowLogoutConfirm(false);
     setIsOpen(false);
     navigate("/");
@@ -36,23 +38,18 @@ function Sidebar({ isOpen, setIsOpen }) {
     { label: "How to Play / Notice", icon: "?", path: "/how-to-play" },
     { label: "Add Money", icon: "+", path: "/add-money" },
     { label: "Withdraw Money", icon: "↓", path: "/withdraw-money" },
+    { label: "Refer & Earn", icon: "★", path: "/refer-and-earn" },
     { label: "Settings", icon: "⚙", path: "/settings" },
     {
       label: "Share",
       icon: "↗",
-      action: async () => {
-        setIsOpen(false);
-
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: "Darbar",
-              text: "Check out Darbar",
-            });
-          } catch (error) {
-            console.log("Share cancelled");
-          }
-        }
+      action: () => {
+        shareText({
+          title: "GVSC",
+          text: "Check out GVSC",
+        }).finally(() => {
+          setIsOpen(false);
+        });
       },
     },
   ];
@@ -96,9 +93,10 @@ function Sidebar({ isOpen, setIsOpen }) {
               <span className="side-menu-label">{item.label}</span>
             </button>
           ))}
+        </nav>
 
+        <div className="side-menu-logout">
           <div className="logout-divider"></div>
-
           <button
             type="button"
             className="side-menu-item logout-item"
@@ -107,7 +105,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             <span className="side-menu-icon">⎋</span>
             <span className="side-menu-label">Logout</span>
           </button>
-        </nav>
+        </div>
       </aside>
 
       {showLogoutConfirm && (

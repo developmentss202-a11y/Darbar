@@ -20,7 +20,7 @@ function Settings() {
       <div className="page-header">
         <h1 className="page-heading">Settings</h1>
         <p className="page-subheading">
-          Manage password, MPIN, notifications and theme
+          Manage password, notifications and theme
         </p>
         <hr className="page-divider" />
       </div>
@@ -32,17 +32,6 @@ function Settings() {
             type="button"
             className="settings-action"
             onClick={() => navigate("/new-password")}
-          >
-            Change
-          </button>
-        </div>
-
-        <div className="settings-row">
-          <span>Change MPIN</span>
-          <button
-            type="button"
-            className="settings-action"
-            onClick={() => navigate("/set-mpin")}
           >
             Change
           </button>
