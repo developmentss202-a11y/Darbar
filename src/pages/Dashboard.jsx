@@ -8,6 +8,12 @@ const SLIDERS_API = import.meta.env.DEV
   ? "/api/app-sliders"
   : `${import.meta.env.VITE_API_ROUTE}/api/app-sliders`;
 
+const MARKETS_API = import.meta.env.DEV
+  ? "/api/market_lists"
+  : `${import.meta.env.VITE_API_ROUTE}/api/market_lists`;
+
+const OPEN_RESULT = "*** ** ***";
+
 function getSliderImages(data) {
   const list = data.data || data.sliders || [];
   if (!Array.isArray(list)) {
@@ -25,94 +31,33 @@ function getSliderImages(data) {
     .filter(Boolean);
 }
 
-/*
-  Later: GET /api/markets
-  Replace this list with the API response.
-  result = "330 63 355" from admin when closed, "*** ** ***" while running
-*/
-const OPEN_RESULT = "*** ** ***";
-const games = [
-  {
-    id: "delhi-star-dl",
-    name: "DELHI STAR-DL",
-    result: "330 63 355",
-    status: "Closed",
-    closeTime: "12:00 PM",
-    resultTime: "12:30 PM",
-  },
-  {
-    id: "rawased",
-    name: "RAWASED",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "01:00 PM",
-    resultTime: "01:30 PM",
-  },
-  {
-    id: "ilag",
-    name: "ILAG",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "02:00 PM",
-    resultTime: "02:20 PM",
-  },
-  {
-    id: "delhi-bazaar",
-    name: "DELHI BAZAAR",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "03:00 PM",
-    resultTime: "03:10 PM",
-  },
-  {
-    id: "shree-ganesh",
-    name: "SHREE GANESH",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "04:30 PM",
-    resultTime: "04:40 PM",
-  },
-  {
-    id: "faridabad",
-    name: "FARIDABAD",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "05:40 PM",
-    resultTime: "06:10 PM",
-  },
-  {
-    id: "ghaziabad",
-    name: "GAZIABAD",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "09:40 PM",
-    resultTime: "10:00 PM",
-  },
-  {
-    id: "gali",
-    name: "GALI",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "11:40 PM",
-    resultTime: "12:00 AM",
-  },
-  {
-    id: "ncr",
-    name: "NCR",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "01:00 AM",
-    resultTime: "01:30 AM",
-  },
-  {
-    id: "disawar",
-    name: "DISAWAR",
-    result: OPEN_RESULT,
-    status: "Running",
-    closeTime: "05:00 AM",
-    resultTime: "05:10 AM",
-  },
-];
+function toAmPm(time) {
+  if (!time) {
+    return "-";
+  }
+
+  const parts = String(time).split(":");
+  const hour = Number(parts[0]);
+  const minute = parts[1] || "00";
+
+  if (Number.isNaN(hour)) {
+    return String(time);
+  }
+
+  const suffix = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 || 12;
+  return `${String(hour12).padStart(2, "0")}:${minute} ${suffix}`;
+}
+
+function resultDisplay(result) {
+  const value = String(result || "").trim();
+
+  if (!value || value === "**") {
+    return OPEN_RESULT;
+  }
+
+  return value.replace(/[-_+]/g, " ");
+}
 
 function CloseTimeIcon() {
   return (
@@ -180,6 +125,9 @@ const Dashboard = () => {
   const [bannerImages, setBannerImages] = useState([{ id: 1, imageUrl: heroImage }]);
   const [telegramHref, setTelegramHref] = useState("https://t.me/");
   const [whatsappHref, setWhatsappHref] = useState("https://wa.me/");
+  const [markets, setMarkets] = useState([]);
+  const [marketsLoading, setMarketsLoading] = useState(true);
+  const [marketsError, setMarketsError] = useState("");
 
   useEffect(() => {
     fetch(SLIDERS_API)
@@ -213,6 +161,69 @@ const Dashboard = () => {
         chatLink("whatsapp", settings.whatsapp || settings.contact_no)
       );
     });
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMarkets = (retry) => {
+      const token = localStorage.getItem("gvsc-token");
+      if (!token) {
+        setMarkets([]);
+        setMarketsError("Can't able to load markets rn");
+        setMarketsLoading(false);
+        return;
+      }
+
+      fetch(MARKETS_API, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json().catch(() => ({})))
+        .then((data) => {
+          if (cancelled) {
+            return;
+          }
+
+          const list = Array.isArray(data.data) ? data.data : [];
+          if (data.status === 0 || !list.length) {
+            if (!retry) {
+              window.setTimeout(() => loadMarkets(true), 400);
+              return;
+            }
+            setMarkets([]);
+            setMarketsError("Can't able to load markets rn");
+            setMarketsLoading(false);
+            return;
+          }
+
+          setMarketsError("");
+          setMarkets(list);
+          setMarketsLoading(false);
+        })
+        .catch(() => {
+          if (cancelled) {
+            return;
+          }
+          if (!retry) {
+            window.setTimeout(() => loadMarkets(true), 400);
+            return;
+          }
+          setMarkets([]);
+          setMarketsError("Can't able to load markets rn");
+          setMarketsLoading(false);
+        });
+    };
+
+    loadMarkets(false);
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -265,74 +276,87 @@ const Dashboard = () => {
       </div>
 
       <section className="dashboard-games" aria-label="Game markets">
-        {games.map((game) => {
-          const isClosed = game.status.toLowerCase() === "closed";
-          const statusClass = game.status.toLowerCase();
-          const resultText = (isClosed ? game.result || OPEN_RESULT : OPEN_RESULT)
-            .replace(/[-_]/g, " ");
-          const resultParts = resultText.split(/\s+/).filter(Boolean);
+        {marketsLoading && (
+          <p className="history-empty">Loading markets...</p>
+        )}
 
-          return (
-            <article
-              key={game.id}
-              className={`game-card game-card--${statusClass}`}
-            >
-              <div className="game-card-header">
-                <h2 className="game-card-name">{game.name}</h2>
-                <span
-                  className={`game-card-status game-card-status--${statusClass}`}
-                >
-                  {game.status}
-                </span>
-              </div>
+        {!marketsLoading && marketsError ? (
+          <p className="history-empty">{marketsError}</p>
+        ) : null}
 
-              <p className="game-card-result">
-                {resultParts.map((part, index) => (
-                  <span
-                    key={`${game.id}-result-${index}`}
-                    className={`game-card-result-part game-card-result-part--${index}`}
-                  >
-                    {part}
-                  </span>
-                ))}
-              </p>
+        {!marketsLoading &&
+          !marketsError &&
+          markets.map((market) => {
+            const isRunning = market.running_status === true;
+            const statusClass = isRunning ? "running" : "closed";
+            const statusLabel = isRunning ? "Running" : "Closed";
+            const resultParts = resultDisplay(market.result)
+              .split(/\s+/)
+              .filter(Boolean);
 
-              <div className="game-card-timer">
-                <span className="game-time-pill">
-                  <span className="game-time-icon" aria-hidden="true">
-                    <CloseTimeIcon />
-                  </span>
-                  <span className="game-time-text">
-                    Close
-                    <strong>{game.closeTime}</strong>
-                  </span>
-                </span>
-                <span className="game-time-pill">
-                  <span className="game-time-icon" aria-hidden="true">
-                    <ResultTimeIcon />
-                  </span>
-                  <span className="game-time-text">
-                    Result
-                    <strong>{game.resultTime}</strong>
-                  </span>
-                </span>
-              </div>
-
-              <button
-                type="button"
-                className="game-play-button"
-                disabled={isClosed}
-                onClick={() => {
-                  if (!isClosed) {
-                    navigate(`/game/${game.id}`);
-                  }
-                }}
+            return (
+              <article
+                key={market.market_id}
+                className={`game-card game-card--${statusClass}`}
               >
-                Play Now
-              </button>
-            </article>
-          );
-        })}
+                <div className="game-card-header">
+                  <h2 className="game-card-name">{market.market_name}</h2>
+                  <span
+                    className={`game-card-status game-card-status--${statusClass}`}
+                  >
+                    {statusLabel}
+                  </span>
+                </div>
+
+                <p className="game-card-result">
+                  {resultParts.map((part, index) => (
+                    <span
+                      key={`${market.market_id}-result-${index}`}
+                      className={`game-card-result-part game-card-result-part--${index}`}
+                    >
+                      {part}
+                    </span>
+                  ))}
+                </p>
+
+                <div className="game-card-timer">
+                  <span className="game-time-pill">
+                    <span className="game-time-icon" aria-hidden="true">
+                      <CloseTimeIcon />
+                    </span>
+                    <span className="game-time-text">
+                      Close
+                      <strong>{toAmPm(market.o_end_time)}</strong>
+                    </span>
+                  </span>
+                  <span className="game-time-pill">
+                    <span className="game-time-icon" aria-hidden="true">
+                      <ResultTimeIcon />
+                    </span>
+                    <span className="game-time-text">
+                      Result
+                      <strong>{toAmPm(market.result_time)}</strong>
+                    </span>
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="game-play-button"
+                  disabled={!isRunning}
+                  onClick={() => {
+                    if (isRunning) {
+                      navigate(`/game/${market.market_id}`, {
+                        state: { name: market.market_name },
+                      });
+                    }
+                  }}
+                >
+                  Play Now
+                </button>
+              </article>
+            );
+          })}
       </section>
     </div>
   );

@@ -25,6 +25,7 @@ import ReferAndEarn from "./pages/ReferAndEarn";
 import GameOptions from "./pages/GameOptions";
 import GameJodi from "./pages/GameJodi";
 import GameHarup from "./pages/GameHarup";
+import LeakJodi from "./pages/LeakJodi";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
           {/* Application Header + Sidebar + Future Footer */}
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/leak-jodi" element={<LeakJodi />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/play-history" element={<PlayHistory />} />

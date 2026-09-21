@@ -30,6 +30,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   const menuItems = [
     { label: "Home", icon: "⌂", path: "/dashboard" },
+    { label: "Leak Jodi", icon: "◉◉", path: "/leak-jodi" },
     { label: "My Profile", icon: "◉", path: "/profile" },
     { label: "My Transactions", icon: "⇄", path: "/transactions" },
     { label: "My Play History", icon: "▣", path: "/play-history" },

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 const games = [
   { id: "delhi-star-dl", name: "DELHI STAR-DL" },
@@ -16,8 +16,9 @@ const games = [
 export default function GameOptions() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const game = games.find((g) => g.id === id);
-  const gameName = game?.name || id?.toUpperCase();
+  const location = useLocation();
+  const game = games.find((g) => String(g.id) === String(id));
+  const gameName = location.state?.name || game?.name || id;
 
   return (
     <div className="app-page">
@@ -32,7 +33,9 @@ export default function GameOptions() {
         <button
           type="button"
           className="game-type-card"
-          onClick={() => navigate(`/game/${id}/jodi`)}
+          onClick={() =>
+            navigate(`/game/${id}/jodi`, { state: { name: gameName } })
+          }
         >
           <span className="game-type-icon game-type-icon--jodi">💎</span>
           <span className="game-type-name game-type-name--jodi">JODI</span>
@@ -42,7 +45,9 @@ export default function GameOptions() {
         <button
           type="button"
           className="game-type-card"
-          onClick={() => navigate(`/game/${id}/harup`)}
+          onClick={() =>
+            navigate(`/game/${id}/harup`, { state: { name: gameName } })
+          }
         >
           <span className="game-type-icon game-type-icon--harup">🔶</span>
           <span className="game-type-name game-type-name--harup">HARUP</span>
