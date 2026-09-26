@@ -1,56 +1,90 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import {
+  placePattiBet,
+  resolveMarketName,
+  resolveUserId,
+} from "../utils/betting";
 
-const games = [
-  { id: "delhi-star-dl", name: "DELHI STAR-DL" },
-  { id: "rawased", name: "RAWASED" },
-  { id: "ilag", name: "ILAG" },
-  { id: "delhi-bazaar", name: "DELHI BAZAAR" },
-  { id: "shree-ganesh", name: "SHREE GANESH" },
-  { id: "faridabad", name: "FARIDABAD" },
-  { id: "ghaziabad", name: "GAZIABAD" },
-  { id: "gali", name: "GALI" },
-  { id: "ncr", name: "NCR" },
-  { id: "disawar", name: "DISAWAR" },
-];
+const JODI_MIN_LENGTH = 2;
+const JODI_MAX_LENGTH = 4;
 
 export default function GameJodi() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [marketName, setMarketName] = useState(location.state?.name || "");
   const [bets, setBets] = useState({});
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-
-  const game = games.find((g) => g.id === id);
-  const gameName = game?.name || id?.toUpperCase();
 
   const numbers = Array.from({ length: 100 }, (_, i) =>
     i.toString().padStart(2, "0"),
   );
 
+  useEffect(() => {
+    let cancelled = false;
+
+    resolveMarketName(id, location.state?.name).then((name) => {
+      if (!cancelled) {
+        setMarketName(name);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, location.state?.name]);
+
   const handleBetChange = (num, value) => {
-    setBets((prev) => ({ ...prev, [num]: value }));
+    const digits = String(value).replace(/\D/g, "").slice(0, JODI_MAX_LENGTH);
+    setBets((prev) => ({ ...prev, [num]: digits }));
   };
 
-  const handleSubmit = () => {
-    const validBets = Object.keys(bets).filter(
-      (key) => bets[key] && parseInt(bets[key]) > 0,
-    );
-    if (validBets.length > 0) {
-      /*
-       * TODO: API call here
-       * POST /api/game/{id}/jodi
-       * body: { bets: validBets.map(n => ({ number: n, points: bets[n] })) }
-       */
+  const handleSubmit = async () => {
+    const validBets = Object.entries(bets)
+      .map(([number, amount]) => ({ number, amount: String(amount) }))
+      .filter(
+        (bet) =>
+          bet.amount.length >= JODI_MIN_LENGTH &&
+          bet.amount.length <= JODI_MAX_LENGTH
+      );
+
+    if (!validBets.length) {
+      setError("Please enter points on at least one number.");
+      return;
+    }
+
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const userId = await resolveUserId();
+      if (!userId) {
+        setError("Please login again.");
+        return;
+      }
+
+      await placePattiBet({
+        userId,
+        marketId: id,
+        betType: "Jodi",
+        gameType: "jodi",
+        bets: validBets,
+      });
       setShowPopup(true);
-    } else {
-      alert("Please enter points for at least one number.");
+    } catch (err) {
+      setError(err.message || "Unable to place bet. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="app-page">
       <div className="page-header">
-        <h1 className="page-heading">{gameName} — JODI</h1>
+        <h1 className="page-heading">{marketName || "Market"} — JODI</h1>
         <p className="page-subheading">
           Enter points on the numbers you want to play
         </p>
@@ -62,9 +96,11 @@ export default function GameJodi() {
           <div key={num} className="jodi-cell">
             <div className="jodi-num">{num}</div>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="jodi-input"
               placeholder="–"
+              maxLength={JODI_MAX_LENGTH}
               value={bets[num] || ""}
               onChange={(e) => handleBetChange(num, e.target.value)}
             />
@@ -72,21 +108,27 @@ export default function GameJodi() {
         ))}
       </div>
 
+      {error ? <p className="form-error">{error}</p> : null}
+
       <div style={{ marginTop: "24px" }}>
-        <button type="button" className="primary-button" onClick={handleSubmit}>
-          SUBMIT
+        <button
+          type="button"
+          className="primary-button"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
         </button>
         <button
           type="button"
           className="primary-button"
-          onClick={() => navigate(`/game/${id}`)}
+          onClick={() => navigate(`/game/${id}`, { state: { name: marketName } })}
           aria-label="Go back"
         >
           GO BACK
         </button>
       </div>
 
-      {/* ===== Success Popup ===== */}
       {showPopup && (
         <div className="game-popup-overlay">
           <div className="game-popup">

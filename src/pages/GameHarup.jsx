@@ -1,34 +1,62 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-
-const games = [
-  { id: "delhi-star-dl", name: "DELHI STAR-DL" },
-  { id: "rawased", name: "RAWASED" },
-  { id: "ilag", name: "ILAG" },
-  { id: "delhi-bazaar", name: "DELHI BAZAAR" },
-  { id: "shree-ganesh", name: "SHREE GANESH" },
-  { id: "faridabad", name: "FARIDABAD" },
-  { id: "ghaziabad", name: "GAZIABAD" },
-  { id: "gali", name: "GALI" },
-  { id: "ncr", name: "NCR" },
-  { id: "disawar", name: "DISAWAR" },
-];
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import {
+  expandHarupNumbers,
+  placePattiBet,
+  resolveMarketName,
+  resolveUserId,
+} from "../utils/betting";
 
 export default function GameHarup() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [marketName, setMarketName] = useState(location.state?.name || "");
   const [type, setType] = useState("Andar");
   const [digit, setDigit] = useState("");
   const [points, setPoints] = useState("");
   const [addedBets, setAddedBets] = useState([]);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const game = games.find((g) => g.id === id);
-  const gameName = game?.name || id?.toUpperCase();
+  useEffect(() => {
+    let cancelled = false;
+
+    resolveMarketName(id, location.state?.name).then((name) => {
+      if (!cancelled) {
+        setMarketName(name);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, location.state?.name]);
 
   const handleAdd = () => {
-    if (!digit || !points) return;
-    setAddedBets((prev) => [...prev, { digit, points, type }]);
+    const expanded = expandHarupNumbers(digit, points, type);
+
+    if (!expanded.length) {
+      setError("Enter a digit (0-9) and points first.");
+      return;
+    }
+
+    setError("");
+    setAddedBets((prev) => {
+      const next = [...prev];
+
+      expanded.forEach((row) => {
+        const existing = next.findIndex((bet) => bet.number === row.number);
+        if (existing >= 0) {
+          next[existing] = row;
+        } else {
+          next.push(row);
+        }
+      });
+
+      return next;
+    });
     setDigit("");
     setPoints("");
   };
@@ -37,32 +65,48 @@ export default function GameHarup() {
     setAddedBets((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
-    if (addedBets.length > 0) {
-      /*
-       * TODO: API call here
-       * POST /api/game/{id}/harup
-       * body: { bets: addedBets }
-       */
+  const handleSubmit = async () => {
+    if (!addedBets.length) {
+      setError("Please add at least one bet.");
+      return;
+    }
+
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const userId = await resolveUserId();
+      if (!userId) {
+        setError("Please login again.");
+        return;
+      }
+
+      await placePattiBet({
+        userId,
+        marketId: id,
+        betType: "Jodi",
+        gameType: "harup",
+        bets: addedBets,
+      });
       setShowPopup(true);
-    } else {
-      alert("Please add at least one bet.");
+    } catch (err) {
+      setError(err.message || "Unable to place bet. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="app-page">
       <div className="page-header">
-        <h1 className="page-heading">{gameName} — HARUP</h1>
+        <h1 className="page-heading">{marketName || "Market"} — HARUP</h1>
         <p className="page-subheading">
           Choose Andar/Bahar, enter digit &amp; points
         </p>
         <hr className="page-divider" />
       </div>
 
-      {/* ===== Form ===== */}
       <div className="harup-form">
-        {/* Andar / Bahar */}
         <div className="harup-row">
           <span className="harup-label">CHOOSE ANDAR / BAHAR</span>
           <div className="harup-radios">
@@ -89,27 +133,31 @@ export default function GameHarup() {
           </div>
         </div>
 
-        {/* Digit */}
         <div className="harup-row">
           <span className="harup-label">ENTER DIGIT</span>
           <input
             type="number"
             className="harup-input"
             value={digit}
-            onChange={(e) => setDigit(e.target.value)}
+            onChange={(e) =>
+              setDigit(e.target.value.replace(/\D/g, "").slice(0, 1))
+            }
             placeholder="0"
+            min="0"
+            max="9"
+            inputMode="numeric"
           />
         </div>
 
-        {/* Points */}
         <div className="harup-row">
           <span className="harup-label">POINTS</span>
           <input
             type="number"
             className="harup-input"
             value={points}
-            onChange={(e) => setPoints(e.target.value)}
+            onChange={(e) => setPoints(e.target.value.replace(/\D/g, ""))}
             placeholder="0"
+            inputMode="numeric"
           />
         </div>
 
@@ -118,7 +166,6 @@ export default function GameHarup() {
         </button>
       </div>
 
-      {/* ===== Bet Table ===== */}
       <div className="app-table-wrap" style={{ marginTop: "20px" }}>
         <table className="app-table">
           <thead>
@@ -138,10 +185,10 @@ export default function GameHarup() {
               </tr>
             ) : (
               addedBets.map((bet, index) => (
-                <tr key={index}>
+                <tr key={`${bet.type}-${bet.number}-${index}`}>
                   <td>{bet.type}</td>
-                  <td>{bet.digit}</td>
-                  <td>{bet.points}</td>
+                  <td>{bet.number}</td>
+                  <td>{bet.amount}</td>
                   <td>
                     <button
                       type="button"
@@ -158,21 +205,27 @@ export default function GameHarup() {
         </table>
       </div>
 
+      {error ? <p className="form-error">{error}</p> : null}
+
       <div style={{ marginTop: "24px" }}>
-        <button type="button" className="primary-button" onClick={handleSubmit}>
-          SUBMIT
+        <button
+          type="button"
+          className="primary-button"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
         </button>
         <button
           type="button"
           className="primary-button"
-          onClick={() => navigate(`/game/${id}`)}
+          onClick={() => navigate(`/game/${id}`, { state: { name: marketName } })}
           aria-label="Go back"
         >
           GO BACK
         </button>
       </div>
 
-      {/* ===== Success Popup ===== */}
       {showPopup && (
         <div className="game-popup-overlay">
           <div className="game-popup">

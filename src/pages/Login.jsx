@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gvscLogo from "../assets/Logo3.png";
+import { saveUserId } from "../utils/betting";
 import "../index.css";
 
 const LOGIN_API = import.meta.env.DEV
@@ -101,6 +102,7 @@ const SignIn = () => {
       if (token) {
         localStorage.setItem("gvsc-token", token);
       }
+      saveUserId(data);
 
       navigate("/dashboard");
     } catch (err) {

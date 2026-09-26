@@ -1,352 +1,188 @@
-import React, { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Pagination, { PAGE_SIZE } from "../components/Pagination";
+import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
 
-/*
- * ============================================================
- * MARKET DATA
- * ============================================================
- *
- * This is your existing games data.
- *
- * IMPORTANT:
- * Later this entire array should come from your API.
- * For now, it is hardcoded for UI development.
- */
+const RESULT_HISTORY_API = import.meta.env.DEV
+  ? "/api/result-history"
+  : `${import.meta.env.VITE_API_ROUTE}/api/result-history`;
 
-const games = [
-  {
-    id: "delhi-star-dl",
-    name: "DELHI STAR-DL",
-    result: "**",
-    status: "Closed",
-    closeTime: "12:00 PM",
-    resultTime: "12:30 PM",
-  },
-  {
-    id: "rawased",
-    name: "RAWASED",
-    result: "**",
-    status: "Running",
-    closeTime: "01:00 PM",
-    resultTime: "01:30 PM",
-  },
-  {
-    id: "ilag",
-    name: "ILAG",
-    result: "**",
-    status: "Running",
-    closeTime: "02:00 PM",
-    resultTime: "02:20 PM",
-  },
-  {
-    id: "delhi-bazaar",
-    name: "DELHI BAZAAR",
-    result: "**",
-    status: "Running",
-    closeTime: "03:00 PM",
-    resultTime: "03:10 PM",
-  },
-  {
-    id: "shree-ganesh",
-    name: "SHREE GANESH",
-    result: "**",
-    status: "Running",
-    closeTime: "04:30 PM",
-    resultTime: "04:40 PM",
-  },
-  {
-    id: "faridabad",
-    name: "FARIDABAD",
-    result: "**",
-    status: "Running",
-    closeTime: "05:40 PM",
-    resultTime: "06:10 PM",
-  },
-  {
-    id: "ghaziabad",
-    name: "GAZIABAD",
-    result: "**",
-    status: "Running",
-    closeTime: "09:40 PM",
-    resultTime: "10:00 PM",
-  },
-  {
-    id: "gali",
-    name: "GALI",
-    result: "**",
-    status: "Running",
-    closeTime: "11:40 PM",
-    resultTime: "12:00 AM",
-  },
-  {
-    id: "ncr",
-    name: "NCR",
-    result: "**",
-    status: "Running",
-    closeTime: "01:00 AM",
-    resultTime: "01:30 AM",
-  },
-  {
-    id: "disawar",
-    name: "DISAWAR",
-    result: "**",
-    status: "Running",
-    closeTime: "05:00 AM",
-    resultTime: "05:10 AM",
-  },
-];
+function mapHistory(item) {
+  return {
+    id: `${item.market_id}-${item.date}-${item.game_type}`,
+    date: item.date || "-",
+    title: item.title || `${item.market_name || "-"} - ${item.game_type || ""}`.trim(),
+    results: Array.isArray(item.items) ? item.items : [],
+  };
+}
 
-/*
- * ============================================================
- * DEMO RESULT HISTORY
- * ============================================================
- *
- * TEMPORARY HARDCODED DATA
- *
- * Replace this with API response later.
- *
- * Structure:
- *
- * gameId
- * date
- * type
- * session
- * number
- * status
- * bid
- * won
- *
- * "type" can be:
- * - Jodi
- * - Haruf Andar
- * - Haruf Bahar
- *
- * Later your API can return these dynamically.
- */
+async function fetchResultsPage(token, page) {
+  const url =
+    page > 1 ? `${RESULT_HISTORY_API}?page=${page}` : RESULT_HISTORY_API;
 
-const resultHistory = [
-  {
-    gameId: "gali",
-    date: "23-08-2022",
-    type: "Jodi",
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
 
-    results: [
-      {
-        id: 1,
-        session: "Close",
-        number: "24",
-        status: "Pending",
-        bid: 200,
-        won: 0,
-      },
-      {
-        id: 2,
-        session: "Close",
-        number: "35",
-        status: "Winner",
-        bid: 100,
-        won: 900,
-      },
-    ],
-  },
-
-  {
-    gameId: "gali",
-    date: "23-08-2022",
-    type: "Haruf Andar",
-
-    results: [
-      {
-        id: 3,
-        session: "Close",
-        number: "2",
-        status: "Winner",
-        bid: 200,
-        won: 1900,
-      },
-      {
-        id: 4,
-        session: "Close",
-        number: "4",
-        status: "Loser",
-        bid: 200,
-        won: 0,
-      },
-    ],
-  },
-
-  {
-    gameId: "gali",
-    date: "22-08-2022",
-    type: "Jodi",
-
-    results: [
-      {
-        id: 5,
-        session: "Close",
-        number: "44",
-        status: "Pending",
-        bid: 100,
-        won: 0,
-      },
-    ],
-  },
-
-  {
-    gameId: "faridabad",
-    date: "23-08-2022",
-    type: "Jodi",
-
-    results: [
-      {
-        id: 6,
-        session: "Close",
-        number: "99",
-        status: "Winner",
-        bid: 100,
-        won: 900,
-      },
-    ],
-  },
-
-  {
-    gameId: "faridabad",
-    date: "23-08-2022",
-    type: "Haruf Andar",
-
-    results: [
-      {
-        id: 7,
-        session: "Close",
-        number: "9",
-        status: "Winner",
-        bid: 200,
-        won: 1900,
-      },
-    ],
-  },
-
-  {
-    gameId: "disawar",
-    date: "22-08-2022",
-    type: "Jodi",
-
-    results: [
-      {
-        id: 8,
-        session: "Close",
-        number: "63",
-        status: "Loser",
-        bid: 100,
-        won: 0,
-      },
-    ],
-  },
-];
-
-/*
- * ============================================================
- * RESULT HISTORY COMPONENT
- * ============================================================
- */
+  const data = await response.json().catch(() => ({}));
+  return { response, data };
+}
 
 function ResultHistory() {
+  const [history, setHistory] = useState([]);
   const [page, setPage] = useState(1);
-  const pageCount = Math.max(1, Math.ceil(resultHistory.length / PAGE_SIZE));
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      const token = localStorage.getItem("gvsc-token");
+      if (!token) {
+        setError("unauthorized");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const first = await fetchResultsPage(token, 1);
+
+        if (isUnauthorizedMessage(first.data.message)) {
+          if (!cancelled) {
+            setError("unauthorized");
+            setHistory([]);
+          }
+          return;
+        }
+
+        if (!first.response.ok || first.data.status === 0) {
+          if (!cancelled) {
+            setError(first.data.message || "Unable to load result history.");
+            setHistory([]);
+          }
+          return;
+        }
+
+        const lastPage = Number(first.data.last_page) || 1;
+        let list = Array.isArray(first.data.data) ? first.data.data : [];
+
+        for (let nextPage = 2; nextPage <= lastPage; nextPage += 1) {
+          const next = await fetchResultsPage(token, nextPage);
+          if (cancelled) {
+            return;
+          }
+          if (Array.isArray(next.data.data)) {
+            list = list.concat(next.data.data);
+          }
+        }
+
+        if (!cancelled) {
+          setHistory(list.map(mapHistory));
+          setError("");
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError("Unable to load result history.");
+          setHistory([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const pageCount = Math.max(1, Math.ceil(history.length / PAGE_SIZE));
   const pagedHistory = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE;
-    return resultHistory.slice(start, start + PAGE_SIZE);
-  }, [page]);
+    return history.slice(start, start + PAGE_SIZE);
+  }, [history, page]);
 
   return (
-    <div className="app-page">
-      {/* ======================================================
-          PAGE HEADER
-          Same header structure as Play History
-      ====================================================== */}
-
+    <div className="app-page result-history-page">
       <div className="page-header">
         <h1 className="page-heading">Result History</h1>
-
         <p className="page-subheading">Check your previous market results</p>
-
         <hr className="page-divider" />
       </div>
 
-      {/* ======================================================
-          RESULT CARDS
-      ====================================================== */}
+      {loading && <p className="page-subheading">Loading result history...</p>}
 
-      <div className="result-history-list">
-        {pagedHistory.map((history) => {
-          /*
-           * Find the market/game from the games array.
-           *
-           * LATER:
-           * If your API already returns the game name,
-           * you won't need this lookup.
-           */
-          const game = games.find((item) => item.id === history.gameId);
+      {!loading && error === "unauthorized" && <AuthRequired />}
 
-          return (
-            <div
-              className="result-history-card"
-              key={`${history.gameId}-${history.date}-${history.type}`}
-            >
-              {/* =================================================
-                  CARD HEADER
-              ================================================= */}
+      {!loading && error && error !== "unauthorized" && (
+        <p className="form-error">{error}</p>
+      )}
 
-              <div className="result-card-header">
-                <span className="result-card-date">Date: {history.date}</span>
+      {!loading && !error && history.length === 0 && (
+        <p className="history-empty">No result history yet</p>
+      )}
 
-                <span className="result-card-game">
-                  {game?.name || history.gameId} - {history.type}
-                </span>
-              </div>
+      {!loading && !error && history.length > 0 && (
+        <>
+          <div className="result-history-list">
+            {pagedHistory.map((item) => (
+              <div className="result-history-card" key={item.id}>
+                <div className="result-card-header">
+                  <span className="result-card-date">Date: {item.date}</span>
+                  <span className="result-card-game">{item.title}</span>
+                </div>
 
-              {/* =================================================
-                  TABLE HEADER
-              ================================================= */}
-
-              <div className="result-table-header">
-                <span>Session</span>
-                <span>Number</span>
-                <span>Status</span>
-                <span>Bid</span>
-                <span>Won</span>
-              </div>
-
-              {/* =================================================
-                  RESULT ROWS
-              ================================================= */}
-
-              <div className="result-table-body">
-                {history.results.map((result) => (
-                  <div className="result-table-row" key={result.id}>
-                    <span>{result.session}</span>
-
-                    <span>{result.number}</span>
-
-                    <span
-                      className={`result-status ${result.status
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
-                    >
-                      {result.status}
-                    </span>
-
-                    <span>{result.bid}</span>
-
-                    <span className="result-won">{result.won}</span>
+                <div className="result-table-scroll">
+                  <div className="result-table-header">
+                    <span>Session</span>
+                    <span>Number</span>
+                    <span>Status</span>
+                    <span>Bid</span>
+                    <span>Won</span>
                   </div>
-                ))}
+
+                  <div className="result-table-body">
+                    {item.results.length === 0 ? (
+                      <div className="result-table-row">
+                        <span style={{ gridColumn: "1 / -1" }}>No results</span>
+                      </div>
+                    ) : (
+                      item.results.map((result) => (
+                        <div className="result-table-row" key={result.id}>
+                          <span>{result.session || "-"}</span>
+                          <span>{result.number ?? "-"}</span>
+                          <span
+                            className={`result-status ${String(result.status || "")
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}`}
+                          >
+                            {result.status || "-"}
+                          </span>
+                          <span>{result.bid ?? 0}</span>
+                          <span className="result-won">{result.won ?? 0}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} className="resultPagination"/>
+            ))}
+          </div>
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            onPageChange={setPage}
+            className="resultPagination"
+          />
+        </>
+      )}
     </div>
   );
 }

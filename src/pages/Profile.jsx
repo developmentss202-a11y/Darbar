@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
+import { saveUserId } from "../utils/betting";
 
 const PROFILE_API = import.meta.env.DEV
   ? "/api/profile-detail"
@@ -69,6 +70,7 @@ function Profile() {
         }
 
         setProfile(data.data);
+        saveUserId(data);
         setError("");
       })
       .catch(() => {

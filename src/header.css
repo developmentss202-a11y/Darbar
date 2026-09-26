@@ -477,6 +477,9 @@
   font-size: var(--font-size-lg);
 
   font-weight: var(--font-weight-semibold);
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ============================================================

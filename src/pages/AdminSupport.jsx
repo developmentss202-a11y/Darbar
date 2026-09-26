@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const SUPPORT_API = import.meta.env.DEV
+  ? "/api/support"
+  : `${import.meta.env.VITE_API_ROUTE}/api/support`;
+
+const emptyForm = {
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+};
+
 const AdminSupport = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
+  const [formData, setFormData] = useState(emptyForm);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
@@ -20,34 +27,60 @@ const AdminSupport = () => {
       ...prev,
       [name]: value,
     }));
+    setError("");
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   console.log("Support Request:", formData);
-
-  //   // API call will go here later
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.subject.trim() ||
+      !formData.message.trim()
+    ) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    const token = localStorage.getItem("gvsc-token");
+    if (!token) {
+      setError("Please login again.");
+      return;
+    }
+
+    setError("");
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch("http://localhost:3000/api/support", {
+      const response = await fetch(SUPPORT_API, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+        }),
       });
 
-      const data = await response.json();
-      console.log(data);
+      const data = await response.json().catch(() => ({}));
 
+      if (!response.ok || data.status === 0) {
+        setError(data.message || "Unable to submit request. Please try again.");
+        return;
+      }
+
+      setFormData(emptyForm);
       setShowSuccessPopup(true);
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      setError("Unable to submit request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -139,8 +172,10 @@ const AdminSupport = () => {
           />
         </div>
 
-        <button type="submit" className="primary-button">
-          Submit Request
+        {error ? <p className="form-error">{error}</p> : null}
+
+        <button type="submit" className="primary-button" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit Request"}
         </button>
       </form>
 

@@ -12,7 +12,7 @@ const MARKETS_API = import.meta.env.DEV
   ? "/api/market_lists"
   : `${import.meta.env.VITE_API_ROUTE}/api/market_lists`;
 
-const OPEN_RESULT = "*** ** ***";
+const OPEN_RESULT = "**";
 
 function getSliderImages(data) {
   const list = data.data || data.sliders || [];
@@ -52,7 +52,7 @@ function toAmPm(time) {
 function resultDisplay(result) {
   const value = String(result || "").trim();
 
-  if (!value || value === "**") {
+  if (!value || value === "**" || /^[*]+(\s+[*]+)*$/.test(value)) {
     return OPEN_RESULT;
   }
 

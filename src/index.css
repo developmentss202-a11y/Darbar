@@ -2921,6 +2921,8 @@ html body .primary-button:hover {
   font-size: 15px;
   text-align: center;
   vertical-align: middle;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .app-table th {
@@ -2961,6 +2963,138 @@ html body .primary-button:hover {
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.transactions-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.transactions-page .app-table-block {
+  min-height: 0;
+}
+
+.transactions-page .app-table-wrap {
+  max-height: min(62vh, 520px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.transactions-page .app-table {
+  table-layout: fixed;
+  width: max(100%, 540px);
+  min-width: 540px;
+}
+
+.transactions-page .app-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.transactions-page .app-table th,
+.transactions-page .app-table td {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.transactions-page .app-table th:nth-child(1),
+.transactions-page .app-table td:nth-child(1) {
+  width: 120px;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.transactions-page .app-table th:nth-child(2),
+.transactions-page .app-table td:nth-child(2) {
+  width: 110px;
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+.transactions-page .app-table th:nth-child(3),
+.transactions-page .app-table td:nth-child(3) {
+  min-width: 220px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.transactions-page .app-table th:nth-child(4),
+.transactions-page .app-table td:nth-child(4) {
+  width: 80px;
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.play-history-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.play-history-page .app-table-block {
+  min-height: 0;
+}
+
+.play-history-page .app-table-wrap {
+  max-height: min(62vh, 520px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.play-history-page .app-table {
+  table-layout: fixed;
+  width: max(100%, 560px);
+  min-width: 560px;
+}
+
+.play-history-page .app-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.play-history-page .app-table th,
+.play-history-page .app-table td {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.play-history-page .app-table th:nth-child(1),
+.play-history-page .app-table td:nth-child(1) {
+  width: 120px;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.play-history-page .app-table th:nth-child(2),
+.play-history-page .app-table td:nth-child(2) {
+  width: 110px;
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+.play-history-page .app-table th:nth-child(3),
+.play-history-page .app-table td:nth-child(3) {
+  width: 90px;
+  min-width: 90px;
+  white-space: nowrap;
+}
+
+.play-history-page .app-table th:nth-child(4),
+.play-history-page .app-table td:nth-child(4) {
+  width: 90px;
+  min-width: 90px;
+  white-space: nowrap;
+}
+
+.play-history-page .app-table th:nth-child(5),
+.play-history-page .app-table td:nth-child(5) {
+  width: 80px;
+  min-width: 80px;
+  white-space: nowrap;
 }
 
 .leak-jodi-page .app-table {
@@ -3746,11 +3880,35 @@ html[data-theme="light"] .confirm-btn-cancel {
    RESULT HISTORY
    ============================================================ */
 
+.result-history-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .result-history-list {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: min(62vh, 520px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.result-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.result-card-header {
+  flex-wrap: wrap;
+}
+
+.result-card-date,
+.result-card-game {
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 /* ============================================================

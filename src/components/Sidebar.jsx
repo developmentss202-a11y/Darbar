@@ -1,11 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { shareText } from "../utils/share";
+import {
+  clearUserId,
+  getStoredUserName,
+  resolveUserName,
+} from "../utils/betting";
+
+function getInitial(name) {
+  return (name || "G").trim().charAt(0).toUpperCase() || "G";
+}
 
 function Sidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [userName, setUserName] = useState(() => getStoredUserName());
+
+  useEffect(() => {
+    let cancelled = false;
+
+    resolveUserName().then((name) => {
+      if (!cancelled && name) {
+        setUserName(name);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleNavigation = (path) => {
     setIsOpen(false);
@@ -23,6 +47,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   const handleLogoutConfirm = () => {
     localStorage.removeItem("gvsc-token");
+    clearUserId();
     setShowLogoutConfirm(false);
     setIsOpen(false);
     navigate("/");
@@ -64,11 +89,11 @@ function Sidebar({ isOpen, setIsOpen }) {
       <aside className={`side-menu ${isOpen ? "open" : ""}`}>
         <div className="side-menu-profile">
           <div className="guest-avatar">
-            <span>G</span>
+            <span>{getInitial(userName)}</span>
           </div>
           <div className="guest-info">
             <span className="guest-label">Welcome</span>
-            <span className="guest-name">Guest</span>
+            <span className="guest-name">{userName || "Guest"}</span>
           </div>
         </div>
 
