@@ -174,35 +174,44 @@
    ============================================================ */
 
 .header-wallet {
-  min-width: 40px;
-
-  width: 40px;
-
-  padding: 0;
-
+  width: auto;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px 0 6px;
+  gap: 6px;
   justify-content: center;
+  background: #2b2b2b;
+  border: 1px solid rgba(224, 155, 26, 0.4);
+  border-radius: 999px;
+}
+
+.header-wallet:hover {
+  background: #333333;
+}
+
+.header-gold-coin img {
+  width: 22px;
+  height: 22px;
+  display: block;
+  object-fit: contain;
 }
 
 .wallet-info {
-  display: none;
+  display: flex;
+  align-items: center;
 }
 
 .wallet-label {
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-xs);
-
-  font-weight: var(--font-weight-regular);
+  display: none;
 }
 
 .wallet-balance {
-  margin-top: 3px;
-
-  color: var(--color-text-primary);
-
-  font-size: var(--font-size-sm);
-
-  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  color: #ffd36a;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 /* ============================================================
@@ -714,20 +723,6 @@
     transform: translateX(0);
   }
 
-  .header-wallet {
-    min-width: 40px;
-
-    width: 40px;
-
-    padding: 0;
-
-    justify-content: center;
-  }
-
-  .wallet-info {
-    display: none;
-  }
-
   .header-actions {
     gap: 5px;
   }
@@ -735,6 +730,22 @@
   .header-action {
     width: 40px;
     height: 40px;
+  }
+
+  .header-wallet {
+    width: auto;
+    min-width: 0;
+    height: 34px;
+    padding: 0 8px 0 5px;
+    justify-content: center;
+  }
+
+  .wallet-info {
+    display: flex;
+  }
+
+  .wallet-balance {
+    font-size: 13px;
   }
 
   .telegram-action {

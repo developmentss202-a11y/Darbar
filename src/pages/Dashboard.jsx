@@ -59,6 +59,35 @@ function resultDisplay(result) {
   return value.replace(/[-_+]/g, " ");
 }
 
+function isMarketRunning(market) {
+  const value = market?.running_status;
+  return (
+    value === true ||
+    value === 1 ||
+    value === "1" ||
+    String(value).toLowerCase() === "true" ||
+    String(value).toLowerCase() === "running"
+  );
+}
+
+function sortMarkets(list) {
+  return [...list].sort((a, b) => {
+    const aRunning = isMarketRunning(a) ? 0 : 1;
+    const bRunning = isMarketRunning(b) ? 0 : 1;
+    return aRunning - bRunning;
+  });
+}
+
+function marketOpenTime(market) {
+  return (
+    market.o_start_time ||
+    market.open_start_time ||
+    market.open_time ||
+    market.start_time ||
+    market.open
+  );
+}
+
 function CloseTimeIcon() {
   return (
     <svg className="game-time-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
@@ -128,6 +157,7 @@ const Dashboard = () => {
   const [markets, setMarkets] = useState([]);
   const [marketsLoading, setMarketsLoading] = useState(true);
   const [marketsError, setMarketsError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetch(SLIDERS_API)
@@ -163,67 +193,64 @@ const Dashboard = () => {
     });
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadMarkets = (retry = false, fromRefresh = false) => {
+    const token = localStorage.getItem("gvsc-token");
+    if (!token) {
+      setMarkets([]);
+      setMarketsError("Can't able to load markets rn");
+      setMarketsLoading(false);
+      setRefreshing(false);
+      return;
+    }
 
-    const loadMarkets = (retry) => {
-      const token = localStorage.getItem("gvsc-token");
-      if (!token) {
-        setMarkets([]);
-        setMarketsError("Can't able to load markets rn");
-        setMarketsLoading(false);
-        return;
-      }
+    if (fromRefresh) {
+      setRefreshing(true);
+    } else {
+      setMarketsLoading(true);
+    }
 
-      fetch(MARKETS_API, {
-        method: "GET",
-        cache: "no-store",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      })
-        .then((response) => response.json().catch(() => ({})))
-        .then((data) => {
-          if (cancelled) {
-            return;
-          }
-
-          const list = Array.isArray(data.data) ? data.data : [];
-          if (data.status === 0 || !list.length) {
-            if (!retry) {
-              window.setTimeout(() => loadMarkets(true), 400);
-              return;
-            }
-            setMarkets([]);
-            setMarketsError("Can't able to load markets rn");
-            setMarketsLoading(false);
-            return;
-          }
-
-          setMarketsError("");
-          setMarkets(list);
-          setMarketsLoading(false);
-        })
-        .catch(() => {
-          if (cancelled) {
-            return;
-          }
+    fetch(MARKETS_API, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json().catch(() => ({})))
+      .then((data) => {
+        const list = Array.isArray(data.data) ? data.data : [];
+        if (data.status === 0 || !list.length) {
           if (!retry) {
-            window.setTimeout(() => loadMarkets(true), 400);
+            window.setTimeout(() => loadMarkets(true, fromRefresh), 400);
             return;
           }
           setMarkets([]);
           setMarketsError("Can't able to load markets rn");
           setMarketsLoading(false);
-        });
-    };
+          setRefreshing(false);
+          return;
+        }
 
+        setMarketsError("");
+        setMarkets(sortMarkets(list));
+        setMarketsLoading(false);
+        setRefreshing(false);
+      })
+      .catch(() => {
+        if (!retry) {
+          window.setTimeout(() => loadMarkets(true, fromRefresh), 400);
+          return;
+        }
+        setMarkets([]);
+        setMarketsError("Can't able to load markets rn");
+        setMarketsLoading(false);
+        setRefreshing(false);
+      });
+  };
+
+  useEffect(() => {
     loadMarkets(false);
-
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   return (
@@ -276,6 +303,15 @@ const Dashboard = () => {
       </div>
 
       <section className="dashboard-games" aria-label="Game markets">
+        <button
+          type="button"
+          className="market-refresh-btn"
+          onClick={() => loadMarkets(false, true)}
+          disabled={refreshing || marketsLoading}
+        >
+          {refreshing ? "Refreshing..." : "Press to refresh market updates"}
+        </button>
+
         {marketsLoading && (
           <p className="history-empty">Loading markets...</p>
         )}
@@ -287,12 +323,17 @@ const Dashboard = () => {
         {!marketsLoading &&
           !marketsError &&
           markets.map((market) => {
-            const isRunning = market.running_status === true;
+            const isRunning = isMarketRunning(market);
             const statusClass = isRunning ? "running" : "closed";
             const statusLabel = isRunning ? "Running" : "Closed";
             const resultParts = resultDisplay(market.result)
               .split(/\s+/)
               .filter(Boolean);
+            const showOpen = !isRunning;
+            const leftTimeLabel = showOpen ? "Open" : "Close";
+            const leftTimeValue = showOpen
+              ? toAmPm(marketOpenTime(market))
+              : toAmPm(market.o_end_time);
 
             return (
               <article
@@ -325,8 +366,8 @@ const Dashboard = () => {
                       <CloseTimeIcon />
                     </span>
                     <span className="game-time-text">
-                      Close
-                      <strong>{toAmPm(market.o_end_time)}</strong>
+                      {leftTimeLabel}
+                      <strong>{leftTimeValue}</strong>
                     </span>
                   </span>
                   <span className="game-time-pill">

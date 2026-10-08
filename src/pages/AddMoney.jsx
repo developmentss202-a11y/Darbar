@@ -3,7 +3,7 @@ import singleCoin from "../assets/singlegold-coin.png";
 import qrPlaceholder from "../assets/qr-placeholder.svg";
 import AppTable from "../components/AppTable";
 import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
-import { WALLET_API, getWalletBalance, loadAppSettings } from "../data/wallet";
+import { loadAppSettings, loadAvailableWallet } from "../data/wallet";
 
 const ADD_MONEY_API = import.meta.env.DEV
   ? "/api/add-money"
@@ -105,20 +105,7 @@ function AddMoney() {
       return;
     }
 
-    fetch(WALLET_API, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json().catch(() => ({})))
-      .then((data) => {
-        if (data.status === 0) {
-          return;
-        }
-        setBalance(getWalletBalance(data));
-      })
-      .catch(() => {});
+    loadAvailableWallet().then(setBalance);
   }, []);
 
   const loadHistory = async (order = historyOrder) => {

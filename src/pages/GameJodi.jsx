@@ -5,6 +5,7 @@ import {
   resolveMarketName,
   resolveUserId,
 } from "../utils/betting";
+import { loadAvailableWallet, notifyWalletChanged } from "../data/wallet";
 
 const JODI_MIN_LENGTH = 2;
 const JODI_MAX_LENGTH = 4;
@@ -18,6 +19,7 @@ export default function GameJodi() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showEmptyPopup, setShowEmptyPopup] = useState(false);
 
   const numbers = Array.from({ length: 100 }, (_, i) =>
     i.toString().padStart(2, "0"),
@@ -43,16 +45,17 @@ export default function GameJodi() {
   };
 
   const handleSubmit = async () => {
-    const validBets = Object.entries(bets)
-      .map(([number, amount]) => ({ number, amount: String(amount) }))
-      .filter(
-        (bet) =>
-          bet.amount.length >= JODI_MIN_LENGTH &&
-          bet.amount.length <= JODI_MAX_LENGTH
-      );
+    const filled = Object.entries(bets)
+      .filter(([, amount]) => String(amount || "").trim())
+      .map(([number, amount]) => ({ number, amount: String(amount) }));
+    const validBets = filled.filter(
+      (bet) =>
+        bet.amount.length >= JODI_MIN_LENGTH &&
+        bet.amount.length <= JODI_MAX_LENGTH
+    );
 
-    if (!validBets.length) {
-      setError("Please enter points on at least one number.");
+    if (!filled.length || validBets.length !== filled.length) {
+      setShowEmptyPopup(true);
       return;
     }
 
@@ -66,6 +69,16 @@ export default function GameJodi() {
         return;
       }
 
+      const total = validBets.reduce(
+        (sum, bet) => sum + (Number(bet.amount) || 0),
+        0
+      );
+      const available = await loadAvailableWallet();
+      if (total > Number(available)) {
+        setError("Not enough wallet balance for this bet.");
+        return;
+      }
+
       await placePattiBet({
         userId,
         marketId: id,
@@ -73,6 +86,7 @@ export default function GameJodi() {
         gameType: "jodi",
         bets: validBets,
       });
+      notifyWalletChanged();
       setShowPopup(true);
     } catch (err) {
       setError(err.message || "Unable to place bet. Please try again.");
@@ -128,6 +142,26 @@ export default function GameJodi() {
           GO BACK
         </button>
       </div>
+
+      {showEmptyPopup && (
+        <div className="game-popup-overlay">
+          <div className="game-popup">
+            <div className="game-popup-header">ADD SOMETHING</div>
+            <div className="game-popup-body">
+              <p className="game-popup-text">
+                Please add points of 2 to 4 digits on at least one number.
+              </p>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={() => setShowEmptyPopup(false)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPopup && (
         <div className="game-popup-overlay">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import singleCoin from "../assets/singlegold-coin.png";
-import { WALLET_API, getWalletBalance } from "../data/wallet";
+import { loadAvailableWallet, notifyWalletChanged } from "../data/wallet";
 import AppTable from "../components/AppTable";
 import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
 
@@ -53,26 +53,12 @@ function WithdrawMoney() {
   const [historyOrder, setHistoryOrder] = useState("latest");
   const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    const token = localStorage.getItem("gvsc-token");
-    if (!token) {
-      return;
-    }
+  const refreshBalance = () => {
+    loadAvailableWallet().then(setBalance);
+  };
 
-    fetch(WALLET_API, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json().catch(() => ({})))
-      .then((data) => {
-        if (data.status === 0) {
-          return;
-        }
-        setBalance(getWalletBalance(data));
-      })
-      .catch(() => {});
+  useEffect(() => {
+    refreshBalance();
   }, []);
 
   const loadHistory = async (order = historyOrder) => {
@@ -116,6 +102,18 @@ function WithdrawMoney() {
     setError("");
 
     if (!amount || !upiId) {
+      setError("Please enter UPI ID and amount.");
+      return;
+    }
+
+    const withdrawAmount = Number(amount);
+    if (!withdrawAmount || withdrawAmount <= 0) {
+      setError("Please enter a valid amount.");
+      return;
+    }
+
+    if (withdrawAmount > Number(balance)) {
+      setError("Amount is more than available wallet balance.");
       return;
     }
 
@@ -135,7 +133,7 @@ function WithdrawMoney() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: Number(amount),
+          amount: withdrawAmount,
           upi_id: upiId.trim(),
         }),
       });
@@ -151,7 +149,12 @@ function WithdrawMoney() {
         return;
       }
 
+      setBalance((current) => Math.max(0, Number(current) - withdrawAmount));
       setShowPending(true);
+      window.setTimeout(() => {
+        refreshBalance();
+        notifyWalletChanged();
+      }, 800);
     } catch (err) {
       setError("Unable to submit withdraw request.");
     } finally {
@@ -195,7 +198,6 @@ function WithdrawMoney() {
           placeholder="name@upi"
           value={upiId}
           onChange={(e) => setUpiId(e.target.value)}
-          required
         />
 
         <label className="money-label" htmlFor="withdraw-amount">
@@ -209,7 +211,6 @@ function WithdrawMoney() {
           placeholder="0"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          required
         />
 
         {error === "unauthorized" ? (
@@ -280,6 +281,20 @@ function WithdrawMoney() {
           </div>
         )}
       </div>
+
+      {isSubmitting && (
+        <div className="game-popup-overlay">
+          <div className="game-popup">
+            <div className="game-popup-header">PLEASE WAIT</div>
+            <div className="game-popup-body">
+              <div className="loading-spinner" aria-hidden="true" />
+              <p className="game-popup-text">
+                Processing your withdrawal request...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPending && (
         <div className="game-popup-overlay">
