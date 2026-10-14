@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GVSC App</title>
+    <script>
+      (function () {
+        var path = location.pathname + location.search;
+        if (!path || path === "/" || path === "/index.html" || path === "/404.html") {
+          location.replace("/");
+          return;
+        }
+        location.replace("/#" + path);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

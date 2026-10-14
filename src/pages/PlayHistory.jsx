@@ -1,27 +1,9 @@
 import { useEffect, useState } from "react";
-import AppTable from "../components/AppTable";
 import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
 
 const BET_HISTORY_API = import.meta.env.DEV
   ? "/api/bet-history"
   : `${import.meta.env.VITE_API_ROUTE}/api/bet-history`;
-
-const columns = [
-  {
-    key: "date",
-    label: "Date",
-    render: (row) => (
-      <span className="table-datetime">
-        <span>{row.date}</span>
-        <span>{row.time}</span>
-      </span>
-    ),
-  },
-  { key: "market", label: "Market" },
-  { key: "type", label: "Type" },
-  { key: "number", label: "Number" },
-  { key: "points", label: "Points" },
-];
 
 function splitDateTime(value) {
   const text = String(value || "").trim();
@@ -48,6 +30,35 @@ function mapBet(item) {
   };
 }
 
+function mergeBets(list) {
+  const grouped = new Map();
+
+  list.forEach((item) => {
+    const bet = mapBet(item);
+    const key = `${bet.date}|${bet.market}|${bet.type}`;
+    const existing = grouped.get(key);
+
+    if (!existing) {
+      grouped.set(key, {
+        id: bet.id || key,
+        date: bet.date,
+        time: bet.time,
+        market: bet.market,
+        type: bet.type,
+        bets: [bet],
+      });
+      return;
+    }
+
+    existing.bets.push(bet);
+    if (!existing.time && bet.time) {
+      existing.time = bet.time;
+    }
+  });
+
+  return [...grouped.values()];
+}
+
 async function fetchBetsPage(token, page) {
   const url = page > 1 ? `${BET_HISTORY_API}?page=${page}` : BET_HISTORY_API;
 
@@ -65,6 +76,7 @@ async function fetchBetsPage(token, page) {
 
 function PlayHistory() {
   const [rows, setRows] = useState([]);
+  const [openId, setOpenId] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -112,7 +124,9 @@ function PlayHistory() {
         }
 
         if (!cancelled) {
-          setRows(list.map(mapBet));
+          const grouped = mergeBets(list);
+          setRows(grouped);
+          setOpenId(grouped[0]?.id || "");
           setError("");
         }
       } catch (err) {
@@ -155,7 +169,57 @@ function PlayHistory() {
       )}
 
       {!loading && !error && rows.length > 0 && (
-        <AppTable columns={columns} rows={rows} />
+        <div className="play-history-list">
+          {rows.map((row) => {
+            const isOpen = openId === row.id;
+
+            return (
+              <article
+                className={`play-history-card ${isOpen ? "is-open" : ""}`}
+                key={row.id}
+              >
+                <button
+                  type="button"
+                  className="play-history-accordion-btn"
+                  onClick={() => setOpenId(isOpen ? "" : row.id)}
+                  aria-expanded={isOpen}
+                >
+                  <div className="play-history-when">
+                    <strong>{row.date}</strong>
+                    {row.time ? <span>{row.time}</span> : null}
+                  </div>
+                  <div className="play-history-summary">
+                    <span className="play-history-market">{row.market}</span>
+                    <span className="play-history-type">{row.type}</span>
+                  </div>
+                  <span className="play-history-toggle" aria-hidden="true">
+                    {isOpen ? "−" : "+"}
+                  </span>
+                </button>
+
+                {isOpen ? (
+                  <div className="play-history-body">
+                    <div className="play-history-table">
+                      <div className="play-history-table-head">
+                        <span>Number</span>
+                        <span>Points</span>
+                      </div>
+                      {row.bets.map((bet, index) => (
+                        <div
+                          className="play-history-table-row"
+                          key={bet.id || `${row.id}-${bet.number}-${index}`}
+                        >
+                          <strong>{bet.number}</strong>
+                          <strong>{bet.points}</strong>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </article>
+            );
+          })}
+        </div>
       )}
     </div>
   );

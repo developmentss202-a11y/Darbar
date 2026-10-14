@@ -6,13 +6,38 @@ const RESULT_HISTORY_API = import.meta.env.DEV
   ? "/api/result-history"
   : `${import.meta.env.VITE_API_ROUTE}/api/result-history`;
 
-function mapHistory(item) {
+function mapHistory(item, index) {
+  const results = Array.isArray(item.items) ? item.items : [];
+
   return {
-    id: `${item.market_id}-${item.date}-${item.game_type}`,
+    id:
+      item.id ||
+      `${item.market_id || item.market_name || "market"}-${item.date || ""}-${item.game_type || ""}-${index}`,
     date: item.date || "-",
-    title: item.title || `${item.market_name || "-"} - ${item.game_type || ""}`.trim(),
-    results: Array.isArray(item.items) ? item.items : [],
+    title:
+      item.title ||
+      `${item.market_name || "-"} - ${item.game_type || ""}`.trim(),
+    results,
   };
+}
+
+function mergeHistory(list) {
+  const grouped = new Map();
+
+  list.forEach((item, index) => {
+    const mapped = mapHistory(item, index);
+    const key = `${mapped.title}|${mapped.date}`;
+    const existing = grouped.get(key);
+
+    if (!existing) {
+      grouped.set(key, mapped);
+      return;
+    }
+
+    existing.results = existing.results.concat(mapped.results);
+  });
+
+  return [...grouped.values()];
 }
 
 async function fetchResultsPage(token, page) {
@@ -81,7 +106,7 @@ function ResultHistory() {
         }
 
         if (!cancelled) {
-          setHistory(list.map(mapHistory));
+          setHistory(mergeHistory(list));
           setError("");
         }
       } catch (err) {
@@ -150,12 +175,18 @@ function ResultHistory() {
 
                   <div className="result-table-body">
                     {item.results.length === 0 ? (
-                      <div className="result-table-row">
-                        <span style={{ gridColumn: "1 / -1" }}>No results</span>
+                      <div className="result-table-row result-table-row--empty">
+                        <span>No results</span>
                       </div>
                     ) : (
-                      item.results.map((result) => (
-                        <div className="result-table-row" key={result.id}>
+                      item.results.map((result, resultIndex) => (
+                        <div
+                          className="result-table-row"
+                          key={
+                            result.id ||
+                            `${item.id}-${result.number}-${result.session}-${resultIndex}`
+                          }
+                        >
                           <span>{result.session || "-"}</span>
                           <span>{result.number ?? "-"}</span>
                           <span

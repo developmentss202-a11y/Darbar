@@ -7,7 +7,11 @@ import closeIcon from "../assets/remove.png";
 import "../header.css";
 
 import gvscLogo from "../assets/Logo3.png";
-import { SETTINGS_API } from "../data/wallet";
+import {
+  SETTINGS_API,
+  WALLET_REFRESH_EVENT,
+  loadAvailableWallet,
+} from "../data/wallet";
 
 const ADD_MONEY_LIST_API = import.meta.env.DEV
   ? "/api/add-money-list"
@@ -16,6 +20,10 @@ const ADD_MONEY_LIST_API = import.meta.env.DEV
 const WITHDRAW_LIST_API = import.meta.env.DEV
   ? "/api/withdraw-list"
   : `${import.meta.env.VITE_API_ROUTE}/api/withdraw-list`;
+
+const MARKETS_API = import.meta.env.DEV
+  ? "/api/market_lists"
+  : `${import.meta.env.VITE_API_ROUTE}/api/market_lists`;
 
 function getApiList(data) {
   const list = data?.data ?? data?.list ?? [];
@@ -81,6 +89,58 @@ function toNotification(row, type) {
   };
 }
 
+function resultStamp(market) {
+  const updated = new Date(market.updated_at || market.created_at || 0);
+  if (!Number.isNaN(updated.getTime()) && updated.getTime() > 0) {
+    return updated.getTime();
+  }
+
+  const time = String(market.result_time || "").trim();
+  const match = time.match(/^(\d{1,2}):(\d{2})(?::\d{2})?/);
+  if (match) {
+    const stamp = new Date();
+    stamp.setHours(Number(match[1]), Number(match[2]), 0, 0);
+    return stamp.getTime();
+  }
+
+  return Date.now();
+}
+
+function marketResultText(market) {
+  const combined = [market.open_result, market.close_result]
+    .filter((value) => value !== undefined && value !== null && String(value).trim() !== "")
+    .join(" ");
+
+  const raw =
+    market.result ||
+    market.result_jodi ||
+    market.jodi ||
+    combined ||
+    "";
+
+  return String(raw).replace(/[-_+]/g, " ").trim();
+}
+
+function hasDeclaredResult(result) {
+  const value = String(result || "").replace(/[-_+]/g, " ").trim();
+  if (!value) {
+    return false;
+  }
+
+  return /\d/.test(value.replace(/[* ]/g, ""));
+}
+
+function toResultNotification(market) {
+  const result = marketResultText(market);
+  return {
+    id: `result-${market.market_id}-${result}`,
+    title: `${market.market_name || "Market"} · Result`,
+    text: `Result declared: ${result}`,
+    time: formatTime(market.updated_at || market.created_at),
+    stamp: resultStamp(market),
+  };
+}
+
 function fromAlerts(list, title) {
   if (!Array.isArray(list)) {
     return [];
@@ -111,8 +171,10 @@ function fromAlerts(list, title) {
 async function fetchList(url, token) {
   const response = await fetch(url, {
     method: "GET",
+    cache: "no-store",
     headers: {
       Authorization: `Bearer ${token}`,
+      Accept: "application/json",
     },
   });
   return response.json().catch(() => ({}));
@@ -147,6 +209,7 @@ function Header({
   const [notifications, setNotifications] = useState([]);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [seenIds, setSeenIds] = useState(() => readSeen());
+  const [walletBalance, setWalletBalance] = useState(0);
 
   panelOpenRef.current = showNotifications;
 
@@ -189,14 +252,21 @@ function Header({
       fetchList(ADD_MONEY_LIST_API, token),
       fetchList(WITHDRAW_LIST_API, token),
       fetchList(SETTINGS_API, token),
+      fetchList(MARKETS_API, token),
     ])
-      .then(([addData, withdrawData, settingsData]) => {
+      .then(([addData, withdrawData, settingsData, marketsData]) => {
         const settings = settingsData.data || settingsData || {};
+        const markets = Array.isArray(marketsData.data)
+          ? marketsData.data
+          : getApiList(marketsData);
         const items = [
           ...getApiList(addData).map((row) => toNotification(row, "add")),
           ...getApiList(withdrawData).map((row) =>
             toNotification(row, "withdraw")
           ),
+          ...markets
+            .filter((market) => hasDeclaredResult(marketResultText(market)))
+            .map(toResultNotification),
           ...fromAlerts(settings.add_money_alerts, "Add Money"),
           ...fromAlerts(settings.withdraw_alerts, "Withdrawal"),
         ];
@@ -235,14 +305,28 @@ function Header({
       });
   };
 
+  const loadWallet = () => {
+    loadAvailableWallet().then(setWalletBalance);
+  };
+
   useEffect(() => {
     loadNotifications(true);
+    loadWallet();
 
     const timer = window.setInterval(() => {
       loadNotifications(false);
+      loadWallet();
     }, 20000);
 
-    return () => window.clearInterval(timer);
+    const onWalletRefresh = () => {
+      loadWallet();
+    };
+    window.addEventListener(WALLET_REFRESH_EVENT, onWalletRefresh);
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener(WALLET_REFRESH_EVENT, onWalletRefresh);
+    };
   }, []);
 
   useEffect(() => {
@@ -275,6 +359,21 @@ function Header({
     }
   }, [isMenuOpen]);
 
+  const [refreshLock, setRefreshLock] = useState(false);
+
+  const handleRefresh = () => {
+    if (refreshLock) {
+      return;
+    }
+    setRefreshLock(true);
+    window.dispatchEvent(new Event("gvsc-markets-refresh"));
+    window.setTimeout(() => setRefreshLock(false), 2000);
+  };
+
+  const [spinning, setSpinning] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const isBusy = spinning || refreshing;
+
   return (
     <header className="app-header">
       <div className="header-left">
@@ -302,6 +401,20 @@ function Header({
       </div>
 
       <div className="header-actions">
+      <button
+        type="button"
+        className={`header-action header-refresh ${isBusy ? "is-busy" : ""}`}
+        onClick={handleRefresh}
+        disabled={isBusy}
+        aria-label={isBusy ? "Refreshing" : "Refresh"}
+        title={isBusy ? "Refreshing..." : "Refresh"}
+      >
+        {isBusy ? (
+          <span className="header-refresh-spinner" aria-hidden="true" />
+        ) : (
+          <span className="header-refresh-icon">⟳</span>
+        )}
+      </button>
         <button
           type="button"
           className="header-action header-wallet"
@@ -313,8 +426,7 @@ function Header({
             <img src={singleCoin} alt="Gold Coin" />
           </span>
           <span className="wallet-info">
-            <span className="wallet-label">Wallet</span>
-            <span className="wallet-balance">₹ 0.00</span>
+            <span className="wallet-balance">{walletBalance}</span>
           </span>
         </button>
 

@@ -6,6 +6,7 @@ import {
   resolveMarketName,
   resolveUserId,
 } from "../utils/betting";
+import { loadAvailableWallet, notifyWalletChanged } from "../data/wallet";
 
 export default function GameHarup() {
   const { id } = useParams();
@@ -81,6 +82,16 @@ export default function GameHarup() {
         return;
       }
 
+      const total = addedBets.reduce(
+        (sum, bet) => sum + (Number(bet.amount) || 0),
+        0
+      );
+      const available = await loadAvailableWallet();
+      if (total > Number(available)) {
+        setError("Not enough wallet balance for this bet.");
+        return;
+      }
+
       await placePattiBet({
         userId,
         marketId: id,
@@ -88,6 +99,7 @@ export default function GameHarup() {
         gameType: "harup",
         bets: addedBets,
       });
+      notifyWalletChanged();
       setShowPopup(true);
     } catch (err) {
       setError(err.message || "Unable to place bet. Please try again.");
