@@ -196,11 +196,12 @@ const AdminSupport = () => {
               readOnly
               aria-readonly="true"
               tabIndex={-1}
+              disabled={true}
             />
           </div>
         </div>
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label className="form-label" htmlFor="support-email">
             Email
           </label>
@@ -226,11 +227,11 @@ const AdminSupport = () => {
           >
             {errors.email || "\u00A0"}
           </div>
-        </div>
+        </div> */}
 
         <div className="form-group">
           <label className="form-label" htmlFor="support-subject">
-            Subject
+            Subject<span className="required-asterisk">*</span>
           </label>
           <div
             className={`input-container ${
@@ -258,7 +259,7 @@ const AdminSupport = () => {
 
         <div className="form-group">
           <label className="form-label" htmlFor="support-message">
-            Message
+            Message<span className="required-asterisk">*</span>
           </label>
           <textarea
             id="support-message"

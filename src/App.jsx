@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import SignUp from "./pages/Signup";
 import Login from "./pages/Login";
@@ -30,7 +30,7 @@ import LeakJodi from "./pages/LeakJodi";
 export default function App() {
   return (
     <div className="app-shell">
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           {/* Landing Page */}
           {/* <Route path="/" element={<LandingPage />} /> */}
@@ -68,7 +68,7 @@ export default function App() {
 
           <Route path="*" element={<Error />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }

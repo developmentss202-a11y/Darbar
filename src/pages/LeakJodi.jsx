@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AppTable from "../components/AppTable";
 import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired";
-import { MARKETS_API } from "../utils/betting";
+// import { MARKETS_API } from "../utils/betting";
 
 const LEAK_JODI_API = import.meta.env.DEV
   ? "/api/leak-jodi-result"
@@ -51,71 +51,83 @@ const columns = [
   },
 ];
 
-function timeToMinutes(time) {
-  const text = String(time || "").trim();
-  if (!text) {
-    return null;
-  }
+// function timeToMinutes(time) {
+//   const text = String(time || "").trim();
+//   if (!text) {
+//     return null;
+//   }
 
-  const match = text.match(/^(\d{1,2}):(\d{2})(?::\d{2})?(?:\s*(AM|PM))?$/i);
-  if (!match) {
-    return null;
-  }
+//   const match = text.match(/^(\d{1,2}):(\d{2})(?::\d{2})?(?:\s*(AM|PM))?$/i);
+//   if (!match) {
+//     return null;
+//   }
 
-  let hour = Number(match[1]);
-  const minute = Number(match[2]);
-  const mer = (match[3] || "").toUpperCase();
+//   let hour = Number(match[1]);
+//   const minute = Number(match[2]);
+//   const mer = (match[3] || "").toUpperCase();
 
-  if (Number.isNaN(hour) || Number.isNaN(minute)) {
-    return null;
-  }
+//   if (Number.isNaN(hour) || Number.isNaN(minute)) {
+//     return null;
+//   }
 
-  if (mer === "PM" && hour < 12) {
-    hour += 12;
-  }
-  if (mer === "AM" && hour === 12) {
-    hour = 0;
-  }
+//   if (mer === "PM" && hour < 12) {
+//     hour += 12;
+//   }
+//   if (mer === "AM" && hour === 12) {
+//     hour = 0;
+//   }
 
-  return hour * 60 + minute;
-}
+//   return hour * 60 + minute;
+// }
 
-function shouldHideLeakJodi(markets) {
-  const closeMinutes = markets
-    .map((market) =>
-      timeToMinutes(
-        market.o_end_time ||
-          market.close_end_time ||
-          market.c_end_time ||
-          market.close_time
-      )
-    )
-    .filter((value) => value !== null);
+// function shouldHideLeakJodi(markets) {
+//   const closeMinutes = markets
+//     .map((market) =>
+//       timeToMinutes(
+//         market.o_end_time ||
+//           market.close_end_time ||
+//           market.c_end_time ||
+//           market.close_time
+//       )
+//     )
+//     .filter((value) => value !== null);
 
-  if (!closeMinutes.length) {
-    return false;
-  }
+//   if (!closeMinutes.length) {
+//     return false;
+//   }
 
-  const lastClose = Math.max(...closeMinutes);
-  const hideAt = (lastClose + 60) % (24 * 60);
-  const now = new Date();
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+//   const lastClose = Math.max(...closeMinutes);
+//   const hideAt = (lastClose + 60) % (24 * 60);
+//   const now = new Date();
+//   const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-  if (lastClose + 60 >= 24 * 60) {
-    return nowMinutes >= hideAt && nowMinutes < lastClose;
-  }
+//   if (lastClose + 60 >= 24 * 60) {
+//     return nowMinutes >= hideAt && nowMinutes < lastClose;
+//   }
 
-  return nowMinutes >= hideAt;
-}
+//   return nowMinutes >= hideAt;
+// }
 
-function mapLeakRow(item, hideNumbers) {
+// function mapLeakRow(item, hideNumbers) {
+//   const leak = item.leak_jodi ?? item.value ?? "--";
+//   const value = leak === "" || leak == null ? "--" : String(leak);
+
+//   return {
+//     id: item.market_id || item.name,
+//     market: item.market_name || item.name || "-",
+//     leakJodi: hideNumbers ? "**" : value,
+//   };
+// }
+
+function mapLeakRow(item) {
   const leak = item.leak_jodi ?? item.value ?? "--";
-  const value = leak === "" || leak == null ? "--" : String(leak);
+  const text = String(leak).trim();
+  const value = text === "" || text == "--" ? "**" : text;
 
   return {
     id: item.market_id || item.name,
     market: item.market_name || item.name || "-",
-    leakJodi: hideNumbers ? "**" : value,
+    leakJodi: value,
   };
 }
 
@@ -132,6 +144,14 @@ async function fetchLeakPage(token, page) {
 
   const data = await response.json().catch(() => ({}));
   return { response, data };
+}
+
+function todayLabel() {
+  return new Date().toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 function LeakJodi() {
@@ -191,25 +211,26 @@ function LeakJodi() {
           }
         }
 
-        let hideNumbers = false;
-        try {
-          const marketsResponse = await fetch(MARKETS_API, {
-            method: "GET",
-            cache: "no-store",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          });
-          const marketsData = await marketsResponse.json().catch(() => ({}));
-          const markets = Array.isArray(marketsData.data) ? marketsData.data : [];
-          hideNumbers = shouldHideLeakJodi(markets);
-        } catch (err) {
-          hideNumbers = false;
-        }
+        // let hideNumbers = false;
+        // try {
+        //   const marketsResponse = await fetch(MARKETS_API, {
+        //     method: "GET",
+        //     cache: "no-store",
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //       Accept: "application/json",
+        //     },
+        //   });
+        //   const marketsData = await marketsResponse.json().catch(() => ({}));
+        //   const markets = Array.isArray(marketsData.data) ? marketsData.data : [];
+        //   hideNumbers = shouldHideLeakJodi(markets);
+        // } catch (err) {
+        //   hideNumbers = false;
+        // }
 
         if (!cancelled) {
-          setRows(list.map((item) => mapLeakRow(item, hideNumbers)));
+          // setRows(list.map((item) => mapLeakRow(item, hideNumbers)));
+          setRows(list.map((item) => mapLeakRow(item)));
           setError("");
         }
       } catch (err) {
@@ -235,7 +256,7 @@ function LeakJodi() {
     <div className="app-page leak-jodi-page">
       <div className="page-header">
         <h1 className="page-heading">{title}</h1>
-        <p className="page-subheading">{subtitle}</p>
+        <p className="page-subheading">{subtitle} - <b style={{ color: "#FFD700" }}>{todayLabel()}</b></p>
         <hr className="page-divider" />
       </div>
 

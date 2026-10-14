@@ -197,7 +197,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("gvsc-token");
     if (!token) {
       setMarkets([]);
-      setMarketsError("Can't able to load markets rn");
+      setMarketsError("You are not authorized to access this page please login");
       setMarketsLoading(false);
       setRefreshing(false);
       return;
@@ -233,7 +233,7 @@ const Dashboard = () => {
         }
 
         setMarketsError("");
-        setMarkets(sortMarkets(list));
+        setMarkets(list);
         setMarketsLoading(false);
         setRefreshing(false);
       })
@@ -252,6 +252,18 @@ const Dashboard = () => {
   useEffect(() => {
     loadMarkets(false);
   }, []);
+
+  useEffect(() => {
+    const onRefresh = () => loadMarkets(false, true);
+    window.addEventListener("gvsc-markets-refresh", onRefresh);
+    return () => window.removeEventListener("gvsc-markets-refresh", onRefresh);
+  }, []);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("gvsc-markets-status", { detail: refreshing })
+    );
+  }, [refreshing]);
 
   return (
     <div className="dashboard-page">
@@ -303,14 +315,16 @@ const Dashboard = () => {
       </div>
 
       <section className="dashboard-games" aria-label="Game markets">
-        <button
+        {/* <button
           type="button"
           className="market-refresh-btn"
           onClick={() => loadMarkets(false, true)}
           disabled={refreshing || marketsLoading}
         >
           {refreshing ? "Refreshing..." : "Press to refresh market updates"}
-        </button>
+        </button> */}
+
+        {refreshing && <p className="history-empty">Refreshing markets...</p>}
 
         {marketsLoading && (
           <p className="history-empty">Loading markets...</p>

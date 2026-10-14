@@ -359,6 +359,21 @@ function Header({
     }
   }, [isMenuOpen]);
 
+  const [refreshLock, setRefreshLock] = useState(false);
+
+  const handleRefresh = () => {
+    if (refreshLock) {
+      return;
+    }
+    setRefreshLock(true);
+    window.dispatchEvent(new Event("gvsc-markets-refresh"));
+    window.setTimeout(() => setRefreshLock(false), 2000);
+  };
+
+  const [spinning, setSpinning] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const isBusy = spinning || refreshing;
+
   return (
     <header className="app-header">
       <div className="header-left">
@@ -386,6 +401,20 @@ function Header({
       </div>
 
       <div className="header-actions">
+      <button
+        type="button"
+        className={`header-action header-refresh ${isBusy ? "is-busy" : ""}`}
+        onClick={handleRefresh}
+        disabled={isBusy}
+        aria-label={isBusy ? "Refreshing" : "Refresh"}
+        title={isBusy ? "Refreshing..." : "Refresh"}
+      >
+        {isBusy ? (
+          <span className="header-refresh-spinner" aria-hidden="true" />
+        ) : (
+          <span className="header-refresh-icon">⟳</span>
+        )}
+      </button>
         <button
           type="button"
           className="header-action header-wallet"

@@ -7,6 +7,7 @@ import AuthRequired, { isUnauthorizedMessage } from "../components/AuthRequired"
 const WITHDRAW_API = import.meta.env.DEV
   ? "/api/amount-request"
   : `${import.meta.env.VITE_API_ROUTE}/api/amount-request`;
+const MIN_WITHDRAW_AMOUNT = 200; // Minimum withdrawal amount is 200
 
 const WITHDRAW_LIST_API = import.meta.env.DEV
   ? "/api/withdraw-list"
@@ -109,6 +110,11 @@ function WithdrawMoney() {
     const withdrawAmount = Number(amount);
     if (!withdrawAmount || withdrawAmount <= 0) {
       setError("Please enter a valid amount.");
+      return;
+    }
+
+    if (withdrawAmount < MIN_WITHDRAW_AMOUNT) {
+      setError(`Minimum withdrawal amount is ${MIN_WITHDRAW_AMOUNT}.`);
       return;
     }
 

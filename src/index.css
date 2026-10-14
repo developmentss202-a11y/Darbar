@@ -4675,3 +4675,195 @@ html[data-theme="light"] .game-popup-body {
 html[data-theme="light"] .game-popup-text {
   color: #18794e !important;
 }
+
+.required-asterisk {
+  color: red;
+  margin-left: 2px;
+}
+
+/* ==========================================================
+   GVSC Dashboard animations
+   Paste at the END of your existing CSS so these override
+   earlier rules. Only animates transform/opacity/box-shadow.
+   ========================================================== */
+
+   .game-card {
+    --glow-rgb: 255, 107, 107;          /* closed = red   */
+    --glow-low: 0.10;
+    --glow-high: 0.45;
+  }
+  .game-card--running {
+    --glow-rgb: 95, 211, 160;           /* running = green */
+    --glow-low: 0.12;
+    --glow-high: 0.55;
+  }
+  
+  /* ---------- 1. Card glow + dim (breathing border light) ---------- */
+  @keyframes card-breathe {
+    0%, 100% {
+      box-shadow:
+        0 0 4px  rgba(var(--glow-rgb), var(--glow-low)),
+        0 0 0    rgba(var(--glow-rgb), 0);
+      border-color: rgba(var(--glow-rgb), 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 14px rgba(var(--glow-rgb), var(--glow-high)),
+        0 0 30px rgba(var(--glow-rgb), calc(var(--glow-high) * 0.35));
+      border-color: rgba(var(--glow-rgb), 1);
+    }
+  }
+  
+  .game-card {
+    animation: card-breathe 3.2s ease-in-out infinite;
+    /* stagger set from JSX: style={{ "--i": index }} */
+    animation-delay: calc(var(--i, 0) * -0.45s);
+  }
+  
+  /* closed cards breathe slower and softer so running ones feel "more alive" */
+  .game-card--closed {
+    animation-duration: 4.8s;
+    --glow-high: 0.28;
+  }
+  
+  /* ---------- 2. Status pill pulse ---------- */
+  @keyframes status-dot-pulse {
+    0%   { box-shadow: 0 0 0 0   rgba(var(--glow-rgb), 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(var(--glow-rgb), 0);    }
+    100% { box-shadow: 0 0 0 0   rgba(var(--glow-rgb), 0);    }
+  }
+  
+  .game-card-status { position: relative; }
+  
+  .game-card-status--running {
+    animation: status-dot-pulse 1.8s ease-out infinite;
+  }
+  
+  /* small live dot before the "Running" text */
+  .game-card-status--running::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: rgb(var(--glow-rgb));
+    vertical-align: middle;
+    animation: live-dot 1.2s ease-in-out infinite;
+  }
+  @keyframes live-dot {
+    0%, 100% { opacity: 1;   transform: scale(1);   }
+    50%      { opacity: 0.3; transform: scale(0.7); }
+  }
+  
+  /* ---------- 3. Play Now: glow only when enabled ---------- */
+  @keyframes play-glow {
+    0%, 100% {
+      box-shadow: 0 0 6px rgba(224, 154, 26, 0.35),
+                  0 0 0   rgba(224, 154, 26, 0);
+    }
+    50% {
+      box-shadow: 0 0 18px rgba(255, 190, 60, 0.85),
+                  0 0 34px rgba(224, 154, 26, 0.35);
+    }
+  }
+  
+  /* light sweep across the button */
+  @keyframes play-shine {
+    0%        { transform: translateX(-120%) skewX(-20deg); }
+    55%, 100% { transform: translateX(260%)  skewX(-20deg); }
+  }
+  
+  .game-play-button {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, filter 0.2s ease;
+  }
+  
+  .game-play-button:not(:disabled) {
+    animation: play-glow 2s ease-in-out infinite;
+  }
+  
+  .game-play-button:not(:disabled)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+    animation: play-shine 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  
+  .game-play-button:not(:disabled):active {
+    transform: scale(0.97);
+  }
+  
+  .game-play-button:disabled {
+    animation: none;
+    box-shadow: none;
+  }
+  
+  /* ---------- 4. Result digits: "waiting" shimmer for ** ---------- */
+  @keyframes result-twinkle {
+    0%, 100% { opacity: 0.55; transform: scale(1);    }
+    50%      { opacity: 1;    transform: scale(1.25); }
+  }
+  .game-card-result-part {
+    display: inline-block;
+    animation: result-twinkle 1.6s ease-in-out infinite;
+  }
+  .game-card-result-part--1 { animation-delay: 0.3s; }
+  .game-card-result-part--2 { animation-delay: 0.6s; }
+  
+  /* ---------- 5. Banner: slow zoom on the active slide ---------- */
+  @keyframes banner-zoom {
+    from { transform: scale(1);    }
+    to   { transform: scale(1.06); }
+  }
+  /* .dashboard-banner-image.is-active {
+    animation: banner-zoom 6s ease-out forwards;
+  } */
+  .dashboard-banner-dot {
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  
+  /* ---------- 6. Telegram / WhatsApp buttons ---------- */
+  @keyframes contact-float {
+    0%, 100% { transform: translateY(0);    }
+    50%      { transform: translateY(-2px); }
+  }
+  .dashboard-contact-btn {
+    transition: transform 0.15s ease, filter 0.2s ease;
+  }
+  .dashboard-contact-btn--telegram  { animation: contact-float 3s ease-in-out infinite; }
+  .dashboard-contact-btn--whatsapp  { animation: contact-float 3s ease-in-out infinite 1.5s; }
+  .dashboard-contact-btn:active     { transform: scale(0.96); }
+  
+  /* ---------- 7. Loading / refresh states ---------- */
+  @keyframes soft-blink {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1;    }
+  }
+  .history-empty { animation: soft-blink 1.4s ease-in-out infinite; }
+  
+  /* ---------- Respect "reduce motion" ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .game-card,
+    .game-card-status--running,
+    .game-card-status--running::before,
+    .game-play-button,
+    .game-play-button::after,
+    .game-card-result-part,
+    .dashboard-banner-image.is-active,
+    .dashboard-contact-btn,
+    .history-empty {
+      animation: none !important;
+    }
+  }
